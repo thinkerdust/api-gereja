@@ -10,31 +10,32 @@ class Authentication extends CI_Controller {
 			$response = [];
 
 			$params = get_params();
-			$nama = $params['nama'];
-			$username = $params['username'];
-			$password = $params['password'];
-			$re_password = $params['re_password'];
-			$no_telp = $params['no_telp'];
+			$nama = isset($params['nama']) ? $params['nama'] : '';
+			$username = isset($params['username']) ? $params['username'] : '';
+			$password = isset($params['password']) ? $params['password'] : '';
+			$re_password = isset($params['re_password']) ? $params['re_password'] : '';
+			$no_telp = isset($params['no_telp']) ? $params['no_telp'] : '';
+			$otp = isset($params['otp']) ? $params['otp'] : '';
+			$username = $this->db->escape_str($username);
+            $password = $this->db->escape_str($password);
 
-	       	if($this->form_validation->run() == FALSE) {
-	       		$status = 400;
-	       		$message = strip_tags($this->form_validation->error_string());
-	       	}else{
-
-	       		$username = $this->input->post('username');
-	       		$no_telp = $this->input->post('no_telp');
-	       		$check_user = $this->Main_Model->view_by_id('user', ['username' => $username, 'no_telp' => $no_telp]);
-
-	       		if(empty($check_user)){
- 
-		       		$otp = rand(100000,999999);
+			if($nama && $username && $password && $re_password && $no_telp && $otp) {
+				$check_user = $this->Main_Model->view_by_id('user', ['username' => $username, 'no_telp' => $no_telp]);
+				if(strlen($password) < 4){
+					$status = 400;
+	       			$message = "Min karakter password adalah 4!";
+				}elseif ($password != $re_password) {
+					$status = 400;
+	       			$message = "Password tidak sama dengan Re-Password!";
+				}elseif (strlen($password) > 3 && $password == $re_password && empty($check_user)) {
 
 		       		$data = array(
-		       				"nama" => $this->input->post('nama'),
+		       				"nama" => $nama,
 		       				"username" => $username,
-		       				"password" => password_hash($this->input->post('password'),PASSWORD_DEFAULT),
+		       				"password" => password_hash($password,PASSWORD_DEFAULT),
 		       				"no_telp" => $no_telp,
 		       				"otp" => $otp,
+		       				"flag" => 1
 		       			);
 
 		       		$process = $this->Main_Model->process_data('user', $data);
@@ -42,19 +43,58 @@ class Authentication extends CI_Controller {
 		       		if($process) {
 		       			$status = 200;
 		       			$message = 'Register Berhasil';
-		       			$response[] = $data;
+		       			$response = $data;
 		       		}else{
 		       			$status = 404;
 		       			$message = 'Register Gagal';
 		       		}
-		       	}else{
-		       		$status = 400;
+				}else{
+					$status = 400;
 		       		$message = 'Username / No Telp sudah digunakan';
-		       	}          
-	       	}
+				}
+
+			}else{
+				$status = 400;
+	       		$message = "Mohon Lengkapi Data!";
+			}
 
 	       	print_json($status,$message,$response);
 	    }
+	}
+
+	function request_otp()
+	{
+		$auth = $this->token->auth('POST', false);
+		if($auth){
+			$response = [];
+			$params = get_params();
+			$otp = rand(100000,999999);
+			$number = isset($params['number']) ? $params['number'] : '';
+
+			if($number){
+				$message = "Helasterion-Ministry Pendaftaran akun baru 
+Jangan berikan kode dengan siapapun
+
+kode Akun anda: ".$otp."
+
+GBT Kristus Alfa Omega";
+				// send otp
+				$send = $this->Main_Model->send_message($number, $message);
+				if($send->success) {
+					$status = 200;
+		       		$message = 'Request OTP Berhasil';
+		       		$response = ['otp' => $otp];
+				}else{
+					$status = 404;
+		       		$message = 'Request OTP Gagal';
+				}
+			}else{
+				$status = 400;
+		       	$message = "Nomor tidak boleh kosong";
+			}
+
+			print_json($status,$message,$response);
+		}
 	}
 
 	function check_otp()
@@ -62,26 +102,25 @@ class Authentication extends CI_Controller {
 		$auth = $this->token->auth('POST',false);
 		if($auth){
 			$response = [];
+			$params = get_params();
 			$username = $this->input->get_request_header('Username');
-			$otp = $this->input->post('otp');
+			$otp = isset($params['otp']) ? $params['otp'] : '';
 
-			$this->form_validation->set_rules('otp', 'OTP', 'required');
-
-			if ($this->form_validation->run() == FALSE) {
-				$status = 400;
-		       	$message = strip_tags($this->form_validation->error_string());
-		       	// html_escape
-			}else{
+			if ($otp) {
 				$user = $this->Main_Model->view_by_id('user', ['username' => $username, 'otp' => $otp]);
 				if(!empty($user)) {
 					$this->Main_Model->process_data('user', ['flag' => 1], ['username' => $username]);
 					$status = 200;
 		       		$message = 'OTP Berhasil';
-		       		$response[] = $user;
+		       		$response = $user;
 				}else{
 					$status = 404;
 		       		$message = 'Data Tidak Ditemukan';
 				}
+				
+			}else{
+				$status = 400;
+		       	$message = "OTP tidak boleh kosong";
 			}
 
 			print_json($status,$message,$response);
@@ -93,8 +132,8 @@ class Authentication extends CI_Controller {
 		$auth = $this->token->auth('POST',false);
 		if($auth){
 			$params = get_params();
-			$username = $params['username'];
-			$password = $params['password'];
+			$username = isset($params['username']) ? $params['username'] : '';
+			$password = isset($params['password']) ? $params['password'] : '';
 
             $response = [];
 
@@ -149,49 +188,43 @@ class Authentication extends CI_Controller {
 		$auth = $this->token->auth('POST', true);
 		if($auth){
 			$response = [];
+			$params = get_params();
 			$user_id = $this->input->get_request_header('User-Id');
-			$password = $this->input->post('password');
-			$new_password = $this->input->post('new_password');
-			$re_password = $this->input->post('re_password');
+			$password = isset($params['password']) ? $params['password'] : '';
+			$new_password = isset($params['new_password']) ? $params['new_password'] : '';
+			$re_password = isset($params['re_password']) ? $params['re_password'] : '';
 
-			$rules_validation = [
-	            [
-	                'field' => 'password',
-	                'label' => 'Password',
-	                'rules' => 'trim|required',
-	            ],
-	            [
-	                'field' => 'new_password',
-	                'label' => 'New Password',
-	                'rules' => 'trim|required|min_length[4]',
-	            ],
-	            [
-	                'field' => 're_password',
-	                'label' => 'Re-Password',
-	                'rules' => 'trim|required|matches[new_password]',
-	            ],
-	        ];
+			$password = $this->db->escape_str($password);
+			$new_password = $this->db->escape_str($new_password);
+			$re_password = $this->db->escape_str($re_password);
 
-	        $this->form_validation->set_rules($rules_validation);
-	       	if($this->form_validation->run() == FALSE) {
-	       		$status = 400;
-	       		$message = strip_tags($this->form_validation->error_string());
-	       	}else{
-	       		$user = $this->Main_Model->view_by_id('user', ['id' => $user_id, 'flag' => 1]);
-	       		if(!empty($user) && password_verify($password,$user->password)){
-	       			$data = array(
+			if($password && $new_password && $re_password){
+				$user = $this->Main_Model->view_by_id('user', ['id' => $user_id, 'flag' => 1]);
+
+				if(strlen($new_password) < 4) {
+					$status = 400;
+	       			$message = "Min karakter password adalah 4!";
+				}elseif($new_password != $re_password) {
+					$status = 400;
+	       			$message = "New Password tidak sama dengan Re-Password";
+				}elseif(strlen($new_password) > 3 && $new_password == $re_password && !empty($user) && password_verify($password,$user->password)) {
+					$data = array(
 	       						"password" => password_hash($new_password,PASSWORD_DEFAULT),
 	       						"update_at" => date('Y-m-d H:i:s')
 	       					);
 	       			$this->Main_Model->process_data('user', $data, ['id' => $user_id]);
 					$status = 200;
 		       		$message = 'Ubah Password Berhasil';
-		       		$response[] = $user;
-	       		}else{
-	       			$status = 404;
+		       		$response = $user;
+				}else{
+					$status = 404;
 					$message = 'Password salah / Data tidak ditemukan';
-	       		}
-	       	}
+				}
+
+			}else{
+				$status = 400;
+	       		$message = "Data Tidak Boleh Kosong!";
+			}
 
 			print_json($status,$message,$response);
 		}
