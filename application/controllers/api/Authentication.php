@@ -64,7 +64,7 @@ class Authentication extends CI_Controller {
 
 	function request_otp()
 	{
-		$auth = $this->token->auth('POST', false);
+		$auth = $this->token->auth('POST', true);
 		if($auth){
 			$response = [];
 			$params = get_params();
@@ -80,6 +80,7 @@ kode Akun anda: ".$otp."
 GBT Kristus Alfa Omega";
 				// send otp
 				$send = $this->Main_Model->send_message($number, $message);
+				$this->Main_Model->log_message($number, $message, $send->success);
 				if($send->success) {
 					$status = 200;
 		       		$message = 'Request OTP Berhasil';

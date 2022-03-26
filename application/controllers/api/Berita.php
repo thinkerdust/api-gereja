@@ -32,7 +32,7 @@ class Berita extends CI_Controller {
 		}
 	}
 
-	function store_renungan()
+	function store_berita()
 	{
 		$auth = $this->token->auth('POST', true);
 		if($auth) {

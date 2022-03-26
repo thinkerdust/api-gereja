@@ -70,4 +70,21 @@ class Main_Model extends CI_Model {
         return json_decode($result);
     }
 
+    function log_message($number = 0, $message = '', $status = 0)
+    {
+        if(!empty($status)) {
+            $status = 'success';
+        }else{
+            $status = 'failed';
+        }
+        
+        $data = array(
+                    "number" => $number,
+                    "message" => $message,
+                    "status" => $status,
+                );
+
+        $this->db->insert("log_message", $data);
+    }
+
 }
