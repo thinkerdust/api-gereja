@@ -21,4 +21,20 @@ class Attendance_Model extends CI_Model {
 		return $query;
 	}
 
+	function view_scan_log($date_start = '', $date_end = '', $user_id = 0) 
+	{
+		$data = [];
+		$condition = '';
+		if(!empty($id)) {
+			$condition = " AND user_id = $user_id";
+		}
+		if($date_start && $date_end){
+			$data = $this->db->query("SELECT * 
+						from log_attendance
+						where (date(check_in) between '$date_start' and '$date_end') $condition ")->result();
+		}
+
+		return $data;
+	}
+
 }

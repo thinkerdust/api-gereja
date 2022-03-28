@@ -1,6 +1,14 @@
 <?php
 
 class Main_Model extends CI_Model {
+
+    function cek_login()
+    {
+        if(empty($this->session->userdata('login')))
+        {
+            redirect(base_url('auth'));
+        }
+    }
 	
 	function process_data($table='', $data='', $condition='') 
     {
@@ -85,6 +93,29 @@ class Main_Model extends CI_Model {
                 );
 
         $this->db->insert("log_message", $data);
+    }
+
+    function get_nij()
+    {
+        $data = $this->db->order_by('insert_at', 'DESC')->get('jemaat')->row();
+        if(!empty($data)){
+            $set_no = (int) $data->nij + 1;
+            if (strlen($set_no) == 1) {
+                $counter = "0000" . $set_no;
+            } elseif (strlen($set_no) == 2) {
+                $counter = "000" . $set_no;
+            } elseif (strlen($set_no) == 3) {
+                $counter = "00" . $set_no;
+            } elseif (strlen($set_no) == 4) {
+                $counter = "0" . $set_no;
+            } else {
+                $counter = $set_no;
+            }
+        }else{
+            $counter = '00001';
+        }
+
+        return $counter;
     }
 
 }

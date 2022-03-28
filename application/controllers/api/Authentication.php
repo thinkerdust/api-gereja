@@ -64,7 +64,7 @@ class Authentication extends CI_Controller {
 
 	function request_otp()
 	{
-		$auth = $this->token->auth('POST', true);
+		$auth = $this->token->auth('POST', false);
 		if($auth){
 			$response = [];
 			$params = get_params();

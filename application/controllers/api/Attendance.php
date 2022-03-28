@@ -131,4 +131,27 @@ class Attendance extends CI_Controller {
 		    return round($miles);
 		}
 	}
+
+	function scan_log()
+	{
+		$auth = $this->token->auth('POST', true);
+		if($auth) { 
+			$params = get_params();
+			$date_start = isset($params['date_start']) ? $params['date_start'] : '';
+			$date_end = isset($params['date_end']) ? $params['date_end'] : '';
+			$user_id = isset($params['user_id']) ? $params['user_id'] : '';
+
+			$response = $this->Attendance_Model->view_scan_log($date_start, $date_end, $user_id);
+
+			if($response) {
+				$status = 200;
+	           	$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+	           	$message = 'Data Tidak Ditemukan';
+			}
+
+			print_json($status,$message,$response);
+		}
+	}
 }
