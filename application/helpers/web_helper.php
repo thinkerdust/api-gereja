@@ -22,4 +22,15 @@
     {
         return json_decode(file_get_contents('php://input'), true);
     }
+
+    function user_level($id)
+    {
+        $data = array( 1 => 'Admin', 
+                        2 => 'Pendeta',
+                        3 => 'Pelayan',
+                        4 => 'Jemaat');
+
+        return $data[$id];
+
+    }
 ?>

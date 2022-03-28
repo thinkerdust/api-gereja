@@ -46,7 +46,7 @@
               </div>
               <div class="form-group">
                 <label>Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo (!empty($data)) ? $data->email:'';?>" required="">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo (!empty($data)) ? $data->email:'';?>">
               </div>
               <div class="form-group">
                 <label>User Level</label>

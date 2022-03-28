@@ -90,7 +90,7 @@ class Master extends CI_Controller {
 	    	$data['nij'] = $this->Main_Model->get_nij();
 	    	$data['insert_by'] = $this->session->userdata('username');
             $data['insert_at'] = date('Y-m-d');
-	    	$save = $this->Main_Model->process_data('jemaat', $data);
+	    	$save = $this->db->insert('jemaat', $data);
 	    }
 
 	    if($save){

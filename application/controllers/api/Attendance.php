@@ -24,7 +24,7 @@ class Attendance extends CI_Controller {
  
         $image_name = $filename.'.png'; //buat name dari qr code sesuai dengan nim
 
-        $qr_url = base_url().'attendance/scan_qr/'.$id;
+        $qr_url = $id;
         $params['data'] = $qr_url; //data yang akan di jadikan QR CODE
         $params['level'] = 'H'; //H=High
         $params['size'] = 10;
@@ -35,7 +35,7 @@ class Attendance extends CI_Controller {
 
     function generate_qrcode()
     {
-    	$auth = $this->token->auth('POST', true);
+    	$auth = $this->token->auth('POST', false);
 		if($auth) { 
 			$params = get_params();
 			$response = [];
@@ -73,7 +73,7 @@ class Attendance extends CI_Controller {
 		}
     }
 
-    function scan_qr($id = 0)
+    function scan_qr()
     {
     	$auth = $this->token->auth('POST', true);
 		if($auth) { 
@@ -81,14 +81,15 @@ class Attendance extends CI_Controller {
 			$params = get_params();
 			$username = $this->input->get_request_header('Username');
 			$user_id = $this->input->get_request_header('User-Id');
+			$id = isset($params['id']) ? $params['id'] : '';
 			$longitude = isset($params['longitude']) ? $params['longitude'] : '';
 			$latitude = isset($params['latitude']) ? $params['latitude'] : '';
 
-			if($longitude && $latitude){
+			if($id && $longitude && $latitude){
 				$lokasi = $this->Main_Model->view_by_id('lokasi', ['id' => $id]);
 
 				if($lokasi) {
-					$radius = 0.05;
+					$radius = 0.1;
 					// cek distance
 					$distance = $this->distance($lokasi->latitude, $lokasi->longitude, $latitude, $longitude, 'K');
 
@@ -137,11 +138,10 @@ class Attendance extends CI_Controller {
 		$auth = $this->token->auth('POST', true);
 		if($auth) { 
 			$params = get_params();
-			$date_start = isset($params['date_start']) ? $params['date_start'] : '';
-			$date_end = isset($params['date_end']) ? $params['date_end'] : '';
-			$user_id = isset($params['user_id']) ? $params['user_id'] : '';
+			$date = isset($params['date']) ? $params['date'] : '';
+			$user_id = $this->input->get_request_header('User-Id');
 
-			$response = $this->Attendance_Model->view_scan_log($date_start, $date_end, $user_id);
+			$response = $this->db->where("user_id = '$user_id' AND DATE(check_in) = '$date'")->get('log_attendance')->result();
 
 			if($response) {
 				$status = 200;
@@ -151,6 +151,51 @@ class Attendance extends CI_Controller {
 	           	$message = 'Data Tidak Ditemukan';
 			}
 
+			print_json($status,$message,$response);
+		}
+	}
+
+	function history_attendance()
+	{
+		$auth = $this->token->auth('POST', true);
+		if($auth) { 
+			$params = get_params();
+			$date_start = isset($params['date_start']) ? $params['date_start'] : '';
+			$date_end = isset($params['date_end']) ? $params['date_end'] : '';
+			$nama = isset($params['nama']) ? $params['nama'] : '';
+
+			$response = $this->Attendance_Model->view_history_attendance($date_start, $date_end, $nama);
+
+			if($response) {
+				$status = 200;
+	           	$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+	           	$message = 'Data Tidak Ditemukan';
+			}
+
+			print_json($status,$message,$response);
+		}
+	}
+
+	function list_lokasi()
+	{
+		$auth = $this->token->auth('GET', false);
+		if($auth) {
+			$params = get_params();
+			$start = isset($params['start']) ? $params['start'] : 0;
+			$count = isset($params['count']) ? $params['count'] : 0;
+
+			$response = $this->Attendance_Model->list_lokasi($start,$count);
+
+			if(!empty($response)) {
+				$status = 200;
+				$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+				$message = 'Data Tidak Ditemukan';
+			}
+		    
 			print_json($status,$message,$response);
 		}
 	}
