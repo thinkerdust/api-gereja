@@ -21,6 +21,7 @@ class Berita_Model extends CI_Model {
 					from berita
 					where flag = 1
 					$condition
+					order by id desc
 					$limit
 				")->result();
 

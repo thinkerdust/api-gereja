@@ -21,6 +21,7 @@ class Renungan_Model extends CI_Model {
 					from renungan
 					where flag = 1
 					$condition
+					order by id desc
 					$limit
 				")->result();
 

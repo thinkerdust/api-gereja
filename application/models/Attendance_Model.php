@@ -31,7 +31,8 @@ class Attendance_Model extends CI_Model {
 		if($date_start && $date_end){
 			$data = $this->db->query("SELECT * 
 						from log_attendance
-						where (date(check_in) between '$date_start' and '$date_end') $condition ")->result();
+						where (date(check_in) between '$date_start' and '$date_end') $condition 
+						order by id desc")->result();
 		}
 
 		return $data;

@@ -21,11 +21,11 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item <?php echo ($sidebar == 'jemaat') ? 'menu-open' : '';?>">
-            <a href="#" class="nav-link <?php echo ($sidebar == 'jemaat') ? 'active' : '';?>">
+          <li class="nav-item <?php echo ($sidebar == 'jemaat' || $sidebar == 'renungan' || $sidebar == 'berita') ? 'menu-open' : '';?>">
+            <a href="#" class="nav-link <?php echo ($sidebar == 'jemaat' || $sidebar == 'renungan' || $sidebar == 'berita') ? 'active' : '';?>">
               <i class="nav-icon fas fa-server"></i>
               <p>
-                Master Data
+                Master
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -34,6 +34,18 @@
                 <a href="<?php echo base_url()?>master/jemaat" class="nav-link <?php echo ($sidebar == 'jemaat') ? 'active' : '';?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Jemaat</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url()?>master/renungan" class="nav-link <?php echo ($sidebar == 'renungan') ? 'active' : '';?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Renungan</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url()?>master/berita" class="nav-link <?php echo ($sidebar == 'berita') ? 'active' : '';?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Berita</p>
                 </a>
               </li>
             </ul>
