@@ -33,11 +33,13 @@ class Authentication extends CI_Controller {
 					}elseif (strlen($password) > 3 && $password == $re_password && empty($check_user)) {
 
 			       		$data = array(
+			       				"nij" => $jemaat->nij,
 			       				"nama" => $nama,
 			       				"username" => $username,
 			       				"password" => password_hash($password,PASSWORD_DEFAULT),
 			       				"no_telp" => $no_telp,
 			       				"otp" => $otp,
+			       				"user_level" => $jemaat->user_level,
 			       				"flag" => 1
 			       			);
 

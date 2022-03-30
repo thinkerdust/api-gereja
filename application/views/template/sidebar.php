@@ -50,6 +50,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url()?>master/media" class="nav-link <?php echo ($sidebar == 'media') ? 'active' : '';?>">
+              <i class="fas fa-photo-video"></i>
+              <p>
+                Media
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
