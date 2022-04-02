@@ -17,8 +17,9 @@ class Renungan extends CI_Controller {
 			$id = isset($params['id']) ? $params['id'] : '';
 			$start = isset($params['start']) ? $params['start'] : 0;
 			$count = isset($params['count']) ? $params['count'] : 0;
+			$search = isset($params['search']) ? $params['search'] : 0;
 
-			$response = $this->Renungan_Model->view_renungan($start,$count,$id);
+			$response = $this->Renungan_Model->view_renungan($start,$count,$id,$search);
 
 			if(!empty($response)) {
 				$status = 200;
@@ -54,6 +55,7 @@ class Renungan extends CI_Controller {
 				$save = $this->Main_Model->process_data('renungan', $data);
 
 				if($save){
+					$this->Notifikasi_Model->send_notif($save, 'renungan');
 	                $status = 200;
 	                $message = 'Data berhasil disimpan';
 	                $response = $data;

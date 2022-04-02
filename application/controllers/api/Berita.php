@@ -54,6 +54,7 @@ class Berita extends CI_Controller {
 				$save = $this->Main_Model->process_data('berita', $data);
 
 				if($save){
+					$this->Notifikasi_Model->send_notif($save, 'berita');
 	                $status = 200;
 	                $message = 'Data berhasil disimpan';
 	                $response = $data;

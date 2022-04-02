@@ -257,6 +257,7 @@ class Master extends CI_Controller {
 	    	$data['insert_by'] = $this->session->userdata('username');
             $data['insert_at'] = date('Y-m-d H-i-s');
 	    	$save = $this->Main_Model->process_data('renungan', $data);
+	    	$this->Notifikasi_Model->send_notif($save, 'renungan');
 	    }
 
 	    if($save){
@@ -401,6 +402,7 @@ class Master extends CI_Controller {
 	    	$data['insert_by'] = $this->session->userdata('username');
             $data['insert_at'] = date('Y-m-d H-i-s');
 	    	$save = $this->Main_Model->process_data('berita', $data);
+	    	$this->Notifikasi_Model->send_notif($save, 'berita');
 	    }
 
 	    if($save){

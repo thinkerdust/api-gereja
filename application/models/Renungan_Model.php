@@ -2,11 +2,15 @@
 
 class Renungan_Model extends CI_Model {
 
-	function view_renungan($start=0, $count=0, $id='')
+	function view_renungan($start=0, $count=0, $id='', $search = '')
 	{
 		$condition = '';
 		if(!empty($id)) {
-			$condition = " AND id = $id";
+			$condition .= " AND id = $id";
+		}
+
+		if(!empty($search)) {
+			$condition .= " AND title like '%$search%'";
 		}
 
 		$limit = '';
