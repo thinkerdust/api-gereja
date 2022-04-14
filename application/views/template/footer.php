@@ -23,6 +23,8 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
+<!-- Moment -->
+<script src="<?php echo base_url();?>assets/plugins/moment/moment.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="<?php echo base_url();?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->
@@ -42,6 +44,8 @@
 <script src="<?php echo base_url();?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- Select2 -->
 <script src="<?php echo base_url();?>assets/plugins/select2/js/select2.full.min.js"></script>
+<!-- Daterangapicker -->
+<script src="<?php echo base_url();?>assets/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url();?>assets/dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
@@ -52,6 +56,11 @@
     $('.select2').select2({
       theme: 'bootstrap4',
       width: '100%',
+    });
+
+    $('.datepicker').daterangepicker({
+      "singleDatePicker": true,
+      "autoApply": true,
     });
 </script>
 <?php 

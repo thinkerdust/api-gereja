@@ -11,7 +11,7 @@ class Media extends CI_Controller {
 
 	function media()
 	{
-		$auth = $this->token->auth('GET', true);
+		$auth = $this->token->auth('POST', true);
 		if($auth) {
 			$params = get_params();
 			$id = isset($params['id']) ? $params['id'] : '';

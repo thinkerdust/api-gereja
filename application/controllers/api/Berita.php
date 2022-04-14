@@ -11,7 +11,7 @@ class Berita extends CI_Controller {
 
 	function berita()
 	{
-		$auth = $this->token->auth('GET', true);
+		$auth = $this->token->auth('POST', true);
 		if($auth) {
 			$params = get_params();
 			$id = isset($params['id']) ? $params['id'] : '';

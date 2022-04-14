@@ -118,4 +118,10 @@ class Main_Model extends CI_Model {
         return $counter;
     }
 
+    function get_nama($nij = '')
+    {
+        $data = $this->view_by_id('jemaat', ['nij' => $nij]);
+        return $data->nama; 
+    }
+
 }

@@ -21,8 +21,8 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item <?php echo ($sidebar == 'jemaat' || $sidebar == 'renungan' || $sidebar == 'berita') ? 'menu-open' : '';?>">
-            <a href="#" class="nav-link <?php echo ($sidebar == 'jemaat' || $sidebar == 'renungan' || $sidebar == 'berita') ? 'active' : '';?>">
+          <li class="nav-item <?php echo ($sidebar == 'jemaat' || $sidebar == 'renungan' || $sidebar == 'berita' || $sidebar == 'ms_warta') ? 'menu-open' : '';?>">
+            <a href="#" class="nav-link <?php echo ($sidebar == 'jemaat' || $sidebar == 'renungan' || $sidebar == 'berita' || $sidebar == 'ms_warta') ? 'active' : '';?>">
               <i class="nav-icon fas fa-server"></i>
               <p>
                 Master
@@ -48,6 +48,12 @@
                   <p>Berita</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url()?>master/ms_warta" class="nav-link <?php echo ($sidebar == 'ms_warta') ? 'active' : '';?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pokok Doa</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
@@ -55,6 +61,14 @@
               <i class="fas fa-photo-video"></i>
               <p>
                 Media
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url()?>warta" class="nav-link <?php echo ($sidebar == 'warta') ? 'active' : '';?>">
+              <i class="fas fa-newspaper"></i>
+              <p>
+                Warta
               </p>
             </a>
           </li>

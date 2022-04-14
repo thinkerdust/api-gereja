@@ -16,7 +16,6 @@ class Master extends CI_Controller {
 		$foot['js'] = 'master/jemaat';
 
 		$data['alert'] = $this->session->flashdata('alert');
-		$data['data'] = '';
 
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $sidebar);
@@ -161,7 +160,6 @@ class Master extends CI_Controller {
 		$foot['js'] = 'master/renungan';
 
 		$data['alert'] = $this->session->flashdata('alert');
-		$data['data'] = '';
 
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $sidebar);
@@ -277,7 +275,7 @@ class Master extends CI_Controller {
 			              </button>
 			            </div>';
   			$this->session->set_flashdata('alert', $alert);
-  			redirect(base_url('master/form_renungan'));
+  			redirect(base_url('master/form_renungan/'.$id));
 	    }
 	}
 
@@ -306,7 +304,6 @@ class Master extends CI_Controller {
 		$foot['js'] = 'master/berita';
 
 		$data['alert'] = $this->session->flashdata('alert');
-		$data['data'] = '';
 
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $sidebar);
@@ -422,7 +419,7 @@ class Master extends CI_Controller {
 			              </button>
 			            </div>';
   			$this->session->set_flashdata('alert', $alert);
-  			redirect(base_url('master/form_berita'));
+  			redirect(base_url('master/form_berita/'.$id));
 	    }
 	}
 
@@ -451,7 +448,6 @@ class Master extends CI_Controller {
 		$foot['js'] = 'master/media';
 
 		$data['alert'] = $this->session->flashdata('alert');
-		$data['data'] = '';
 
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $sidebar);
@@ -569,7 +565,7 @@ class Master extends CI_Controller {
 			              </button>
 			            </div>';
   			$this->session->set_flashdata('alert', $alert);
-  			redirect(base_url('master/form_media'));
+  			redirect(base_url('master/form_media/'.$id));
 	    }
 	}
 
@@ -590,5 +586,125 @@ class Master extends CI_Controller {
 		            </div>';
 		$this->session->set_flashdata('alert', $alert);
     	redirect(base_url('master/media'), 'refresh');
+	}
+
+	public function ms_warta()
+	{
+		$sidebar['sidebar'] = 'ms_warta';
+		$foot['js'] = 'master/ms_warta';
+
+		$data['alert'] = $this->session->flashdata('alert');
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $sidebar);
+		$this->load->view('master/ms_warta', $data);
+		$this->load->view('template/footer', $foot);
+	}
+
+	public function ajax_data_ms_warta()
+	{
+		if($this->input->is_ajax_request()){
+			$arr = [];
+            $no = 1;
+            $data = $this->Main_Model->view_by_id('ms_warta', ['flag' => 1], 'result');
+            if(!empty($data)){
+            	foreach($data as $row => $val){
+            		$action = '<a href="'.base_url().'master/form_ms_warta/'.$val->id.'" class="btn btn-warning">Edit</a>
+                        <a href="'.base_url().'master/delete_ms_warta/'.$val->id.'" class="btn btn-danger">Hapus</a>';
+
+                    $deskripsi = $val->deskripsi;
+                    if(strlen($deskripsi) > 200){
+                    	$deskripsi = substr($val->deskripsi, 0, 200).' ... ';
+                    }
+
+            		$arr[$row] = array(
+                        $no++,
+                        $val->judul,
+                        $deskripsi,
+                        $action
+                    );
+            	}
+            }
+            $respon = array('data' => $arr);
+            echo json_encode($respon);
+		}else{
+			show_404();
+		}
+	}
+
+	public function form_ms_warta($id = '')
+	{
+		$sidebar['sidebar'] = 'ms_warta';
+
+		$data['data'] = $this->Main_Model->view_by_id('ms_warta', ['id'=>$id]);
+		$data['alert'] = $this->session->flashdata('alert');
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $sidebar);
+		$this->load->view('master/form_ms_warta', $data);
+		$this->load->view('template/footer');
+	}
+
+	public function store_ms_warta()
+	{
+		$id = $this->input->post('id');
+		$judul = $this->input->post('judul');
+		$deskripsi = $this->input->post('deskripsi');
+
+		$data = array(
+			'judul' => $judul,
+			'deskripsi' => $deskripsi,
+		);
+
+
+		if(!empty($id))
+	    {
+	    	$data['update_by'] = $this->session->userdata('username');
+            $data['update_at'] = date('Y-m-d H-i-s');
+	    	$save = $this->Main_Model->process_data('ms_warta', $data, ['id' => $id]);
+	    }else{
+	    	$data['insert_by'] = $this->session->userdata('username');
+            $data['insert_at'] = date('Y-m-d H-i-s');
+	    	$save = $this->Main_Model->process_data('ms_warta', $data);
+	    }
+
+	    if($save){
+	    	$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+			              <strong>Sukses!</strong> Data berhasil tersimpan.
+			              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			                <span aria-hidden="true">&times;</span>
+			              </button>
+			            </div>';
+  			$this->session->set_flashdata('alert', $alert);
+	    	redirect(base_url('master/ms_warta'), 'refresh');
+	    }else{
+	    	$alert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			              <strong>Error!</strong> Data gagal tersimpan.
+			              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			                <span aria-hidden="true">&times;</span>
+			              </button>
+			            </div>';
+  			$this->session->set_flashdata('alert', $alert);
+  			redirect(base_url('master/form_ms_warta/'.$id));
+	    }
+	}
+
+	public function delete_ms_warta($id)
+	{
+		$data = array(
+					"flag" => 0,
+					"update_by" => $this->session->userdata('username'),
+            		"update_at" => date('Y-m-d')
+				);
+		$hapus = $this->Main_Model->process_data("ms_warta", $data, ['id' => $id]);
+
+		$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+		              <strong>Sukses!</strong> Data berhasil dihapus.
+		              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
+		              </button>
+		            </div>';
+		$this->session->set_flashdata('alert', $alert);
+    	redirect(base_url('master/ms_warta'), 'refresh');
 	}
 }

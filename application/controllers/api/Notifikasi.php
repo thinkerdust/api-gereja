@@ -62,7 +62,7 @@ class Notifikasi extends CI_Controller {
 			$fcm_id = isset($params['fcm_id']) ? $params['fcm_id'] : '';
 
 			if($fcm_id){
-				$user = $this->Main_Model->process_data('user', ['fcm_id' => $fcm_id], ['id' => $id]);
+				$user = $this->Main_Model->process_data('user', ['fcm_id' => $fcm_id], ['id' => $user_id]);
 
 				if(!empty($user)) {
 					$response = $user;
