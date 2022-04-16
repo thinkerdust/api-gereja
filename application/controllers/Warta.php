@@ -27,31 +27,34 @@ class Warta extends CI_Controller {
 	{
 		if($this->input->is_ajax_request()){
 			$arr = [];
-            $no = 1;
-            $data = $this->Main_Model->view_by_id('warta', ['flag' => 1], 'result');
-            if(!empty($data)){
-            	foreach($data as $row => $val){
-            		$action = '<a href="'.base_url().'warta/form_warta/'.$val->id.'" class="btn btn-warning">Edit</a>
-                        <a href="'.base_url().'warta/notif_warta/'.$val->id.'" class="btn btn-info">Notif</a>';
+			$no = 1;
+			$data = $this->db->order_by('insert_at', 'desc')->where('flag', 1)->get('warta')->result();
+			if(!empty($data)){
+				foreach($data as $row => $val){
+					$action = '<a href="'.base_url().'warta/form_warta/'.$val->id.'" class="btn btn-warning">Edit</a>
+									<a href="'.base_url().'warta/notif_warta/'.$val->id.'" class="btn btn-info">Notif</a>
+									<a href="'.base_url().'warta/delete_warta/'.$val->id.'" class="btn btn-danger">Hapus</a>';
 
-            		$arr[$row] = array(
-                        $no++,
-                        local_date_format($val->tanggal),
-                        $this->Main_Model->get_nama($val->leader),
-                        'Singer 1 :'.$this->Main_Model->get_nama($val->singer1).'
-                        <br> Singer 2 :'.$this->Main_Model->get_nama($val->singer2),
-                        // $this->Main_Model->get_nama($val->koor_musik),
-                        $this->Main_Model->get_nama($val->koordinator),
-                        $val->usher,
-                        $val->kolektan,
-                        $val->petugas_lcd,
-                        $val->termo_gun,
-                        $action
-                    );
-            	}
-            }
-            $respon = array('data' => $arr);
-            echo json_encode($respon);
+					$datetime = explode(' ', $val->tanggal);
+					$time = date('H:i', strtotime($datetime[1]));
+
+					$arr[$row] = array(
+									$no++,
+									local_date_format($datetime[0]).' '.$time,
+									$this->Main_Model->get_nama($val->leader),
+									'Singer 1 :'.$this->Main_Model->get_nama($val->singer1).'
+									<br> Singer 2 :'.$this->Main_Model->get_nama($val->singer2),
+									$this->Main_Model->get_nama($val->koordinator),
+									$val->usher,
+									$val->kolektan,
+									$val->petugas_lcd,
+									$val->termo_gun,
+									$action
+							);
+				}
+			}
+			$respon = array('data' => $arr);
+			echo json_encode($respon);
 		}else{
 			show_404();
 		}
@@ -87,6 +90,7 @@ class Warta extends CI_Controller {
 	{
 		$id = $this->input->post('id');
 		$tanggal = $this->input->post('tanggal');
+		$tanggal = date('Y-m-d H:i:s', strtotime($tanggal));
 		$leader = $this->input->post('leader');
 		$singer1 = $this->input->post('singer1');
 		$singer2 = $this->input->post('singer2');
@@ -105,7 +109,7 @@ class Warta extends CI_Controller {
 		$this->db->trans_start();
 
 		$data = array(
-			'tanggal' => date('Y-m-d', strtotime($tanggal)),
+			'tanggal' => $tanggal,
 			'leader' => $leader,
 			'singer1' => $singer1,
 			'singer2' => $singer2,
@@ -117,20 +121,21 @@ class Warta extends CI_Controller {
 		);
 
 		if(!empty($id))
-	    {
-	    	$data['update_by'] = $this->session->userdata('username');
-            $data['update_at'] = date('Y-m-d H-i-s');
-	    	$save = $this->Main_Model->process_data('warta', $data, ['id' => $id]);
-	    	$id_warta = $id;
-	    }else{
-	    	$data['insert_by'] = $this->session->userdata('username');
-            $data['insert_at'] = date('Y-m-d H-i-s');
-	    	$save = $this->Main_Model->process_data('warta', $data);
-	    	$id_warta = $save;
-	    }
+		{
+			$data['update_by'] = $this->session->userdata('username');
+					$data['update_at'] = date('Y-m-d H-i-s');
+			$save = $this->Main_Model->process_data('warta', $data, ['id' => $id]);
+			$id_warta = $id;
+		}else{
+			$data['insert_by'] = $this->session->userdata('username');
+					$data['insert_at'] = date('Y-m-d H-i-s');
+			$save = $this->Main_Model->process_data('warta', $data);
+			$id_warta = $save;
+		}
 
-	    $this->db->delete('tim_musik', ['id_warta' => $id_warta]);
-	    $this->db->delete('warta_detail', ['id_warta' => $id_warta]);
+		$this->db->delete('tim_musik', ['id_warta' => $id_warta]);
+		$this->db->delete('warta_detail', ['id_warta' => $id_warta]);
+		$this->db->delete('notif_approval_warta', ['id_warta' => $id_warta]);
 
 		$tim_musik = array(
 			'id_warta' => $id_warta,
@@ -153,27 +158,105 @@ class Warta extends CI_Controller {
 
 		$this->db->insert_batch('warta_detail', $data_pokok_doa);
 
+		$tgl_notif = date('Y-m-d', strtotime($tanggal));
+		$tgl_notif = date('Y-m-d H:i:s', strtotime($tgl_notif.' -4 day'.' 19:00:00'));
+
+		$data_notif = [];
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $leader,
+								'posisi' => 'Worship Leader',
+								'kolom' => 'leader',
+								'tabel' => 'warta',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $singer1,
+								'posisi' => 'Singer 1',
+								'kolom' => 'singer1',
+								'tabel' => 'warta',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $singer2,
+								'posisi' => 'Singer 2',
+								'kolom' => 'singer2',
+								'tabel' => 'warta',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $koordinator,
+								'posisi' => 'Koordinator',
+								'kolom' => 'koordinator',
+								'tabel' => 'warta',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $gitar,
+								'posisi' => 'Team Musik - Gitar',
+								'kolom' => 'gitar',
+								'tabel' => 'tim_musik',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $bass,
+								'posisi' => 'Team Musik - Bass',
+								'kolom' => 'bass',
+								'tabel' => 'tim_musik',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $drum,
+								'posisi' => 'Team Musik - Drum',
+								'kolom' => 'drum',
+								'tabel' => 'tim_musik',
+							);
+
+		$data_notif[] = array(
+								'id_warta' => $id_warta,
+								'tgl_notif' => $tgl_notif,
+								'nij' => $keyboard,
+								'posisi' => 'Team Musik - Keyboard',
+								'kolom' => 'keyboard',
+								'tabel' => 'tim_musik',
+							);
+
+		$this->db->insert_batch('notif_approval_warta', $data_notif);
+
 		$this->db->trans_complete();
 
 		if($this->db->trans_status() === TRUE){
-	    	$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-			              <strong>Sukses!</strong> Data berhasil tersimpan.
-			              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			                <span aria-hidden="true">&times;</span>
-			              </button>
-			            </div>';
-  			$this->session->set_flashdata('alert', $alert);
-	    	redirect(base_url('warta'), 'refresh');
+				$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+										<strong>Sukses!</strong> Data berhasil tersimpan.
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>';
+				$this->session->set_flashdata('alert', $alert);
+				redirect(base_url('warta'), 'refresh');
 		}else{
-	    	$alert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			              <strong>Error!</strong> Data gagal tersimpan.
-			              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			                <span aria-hidden="true">&times;</span>
-			              </button>
-			            </div>';
-  			$this->session->set_flashdata('alert', $alert);
-  			redirect(base_url('warta/form_warta/'.$id));
-	    }
+				$alert = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+										<strong>Error!</strong> Data gagal tersimpan.
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>';
+				$this->session->set_flashdata('alert', $alert);
+				redirect(base_url('warta/form_warta/'.$id));
+			}
 	}
 
 	public function delete_warta($id)
@@ -181,30 +264,30 @@ class Warta extends CI_Controller {
 		$data = array(
 					"flag" => 0,
 					"update_by" => $this->session->userdata('username'),
-            		"update_at" => date('Y-m-d')
+					"update_at" => date('Y-m-d')
 				);
 		$hapus = $this->Main_Model->process_data("warta", $data, ['id' => $id]);
 
 		$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-		              <strong>Sukses!</strong> Data berhasil dihapus.
-		              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-		                <span aria-hidden="true">&times;</span>
-		              </button>
-		            </div>';
+									<strong>Sukses!</strong> Data berhasil dihapus.
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>';
 		$this->session->set_flashdata('alert', $alert);
-    	redirect(base_url('warta'), 'refresh');
+		redirect(base_url('warta'), 'refresh');
 	}
 
 	public function notif_warta($id)
 	{
 		$notif = $this->Warta_Model->send_notif_warta($id);
 		$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-              <strong>Sukses!</strong> Push Notif berhasil.
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>';
+							<strong>Sukses!</strong> Push Notif berhasil.
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>';
 		$this->session->set_flashdata('alert', $alert);
-    	redirect(base_url('warta'), 'refresh');
+			redirect(base_url('warta'), 'refresh');
 	}
 }

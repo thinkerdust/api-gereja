@@ -124,4 +124,10 @@ class Main_Model extends CI_Model {
         return $data->nama; 
     }
 
+    function get_fcm($nij = '')
+    {
+        $data = $this->view_by_id('user', ['nij' => $nij, 'fcm_id !=' => '']);
+        return $data->fcm_id; 
+    }
+
 }

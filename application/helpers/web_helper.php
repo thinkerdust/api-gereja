@@ -62,4 +62,11 @@
         $nama = $ci->Main_Model->get_nama($nij);
         return $nama;
     }
+
+    function get_fcm($nij = '')
+    {
+        $ci =& get_instance();
+        $nama = $ci->Main_Model->get_fcm($nij);
+        return $nama;
+    }
 ?>

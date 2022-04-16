@@ -143,4 +143,23 @@ class Setting extends CI_Controller {
         curl_close($ch);
         echo $result;
 	}
+
+	function data_jemaat()
+	{
+		$auth = $this->token->auth('GET', true);
+		if($auth) {
+
+			$response = $this->Main_Model->view_by_id('jemaat', ['flag' => 1]);
+
+			if(!empty($response)) {
+				$status = 200;
+				$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+				$message = 'Data Tidak Ditemukan';
+			}
+		    
+			print_json($status,$message,$response);
+		}
+	}
 }

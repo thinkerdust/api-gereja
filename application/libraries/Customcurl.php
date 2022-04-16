@@ -54,6 +54,5 @@ class Customcurl
                     'flag' => $flag
                 ]);
       }
-
   }
 }

@@ -40,7 +40,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Tanggal Ibadah</label>
-                    <input type="text" class="form-control datepicker" id="tanggal" name="tanggal" placeholder="Tanggal" value="<?php echo (!empty($data)) ? date('m/d/Y', strtotime($data->tanggal)):'';?>" required="" readonly>
+                    <input type="text" class="form-control datetimepicker" id="tanggal" name="tanggal" placeholder="Tanggal" value="<?php echo (!empty($data)) ? date('m/d/Y H:i:s', strtotime($data->tanggal)):'';?>" required="" readonly>
                   </div>
                   <div class="form-group">
                     <label>Worship Leader</label>

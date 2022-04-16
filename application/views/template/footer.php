@@ -62,6 +62,17 @@
       "singleDatePicker": true,
       "autoApply": true,
     });
+
+    $('.datetimepicker').daterangepicker({
+      "singleDatePicker": true,
+      "autoApply": true,
+      "timePicker": true,
+      "timePicker24Hour": true,
+      "timePickerSeconds": true,
+      "locale": {
+         format: 'M/DD/YYYY HH:mm:ss'
+       }
+    });
 </script>
 <?php 
 if (isset($js)) {  ?>

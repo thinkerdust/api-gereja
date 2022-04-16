@@ -2,15 +2,21 @@
 
 class Warta_Model extends CI_Model {
 
-	function view_warta()
+	function view_warta($id = '')
 	{
         $result = [];
+
+        $condition = '';
+        if(!empty($id)){
+        	$condition = " AND w.id = $id";
+        }
 
         $warta = $this->db->query("
         			SELECT w.*, tm.gitar, tm.bass, tm.keyboard, tm.drum, tm.group 
         			FROM warta w
         			left join tim_musik tm on w.id = tm.id_warta
-        			where w.flag = 1
+        			where w.flag = 1 
+        			$condition
         			order by w.insert_at desc
         			limit 1
         		")->row();
@@ -18,8 +24,12 @@ class Warta_Model extends CI_Model {
         if(!empty($warta)) {
         	$data_warta = [];
         	$id_warta = $warta->id;
+        	$datetime = explode(' ', $warta->tanggal);
+        	$time = date('H:i', strtotime($datetime[1]));
+
     		$arr_warta = array(
     					'id_warta' => $id_warta,
+    					'tanggal' => local_date_format($datetime[0]).' '.$time,
     					'worship_leader' => get_nama($warta->leader),
     					'singer1' => get_nama($warta->singer1),
     					'singer2' => get_nama($warta->singer2),
@@ -58,17 +68,32 @@ class Warta_Model extends CI_Model {
         return $result;
 	}
 
-	function send_notif_warta($id = 0)
+	function send_notif_warta($id)
 	{
 		$jemaat = $this->db->where(['flag' => 1, 'fcm_id !=' => ''])->get('user')->result();
 		if (!empty($jemaat)) {
 			foreach($jemaat as $row) {
-				$fcm = $row->fcm_id;
-				$warta = 
-				
+				$warta = $this->db->where(['id' => $id])->get('warta')->row();
+				$datetime = explode(' ', $warta->tanggal);
+				$time = date('H:i', strtotime($datetime[1]));
+				$date = local_date_format($datetime[0]);
 
-				$this->customcurl->fcm('warta',$fcm,$title,$body,$image,$data);
+				$title = 'Update Warta';
+				$body = 'Shalom Jemaat yang dikasihi Tuhan, jangan lupa datang ibadah ya pada '.$date.' Pukul: .'.$time.'. . Tuhan Yesus Memberkati';
+				$fcm = $row->fcm_id;
+				$data = $this->view_warta($id);
+				
+				$this->customcurl->fcm('warta',$fcm,$title,$body,'',$data);
 			}
+		}
+	}
+
+	function notif_reject_warta($fcm,$nama,$data = '')
+	{
+		if(!empty($fcm)){
+			$title = 'Pergantian Pelayan';
+			$body =  $nama.' telah merekomendasikan anda untuk menggantikannya, konfirmasi jika setuju';
+			$this->customcurl->fcm('warta',$fcm,$title,$body,'',$data);
 		}
 	}
 

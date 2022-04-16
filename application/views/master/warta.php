@@ -39,7 +39,6 @@
                     <th>Tanggal</th>
                     <th>Worship Leader</th>
                     <th>Singer</th>
-                   <!--  <th>Koor Musik</th> -->
                     <th>Koordinator</th>
                     <th>Usher</th>
                     <th>Kolektan</th>
