@@ -81,4 +81,88 @@ class Notifikasi extends CI_Controller {
 			print_json($status,$message,$response);
 		}
 	}
+
+	function list_notif()
+	{
+		$auth = $this->token->auth('POST', true);
+		if($auth) {
+			$params = get_params();
+			$nij = isset($params['nij']) ? $params['nij'] : '';
+			$response = $this->Main_Model->view_by_id('log_notifikasi', ['nij' => $nij], 'result');
+
+			if(!empty($response)) {
+				$status = 200;
+				$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+				$message = 'Data Tidak Ditemukan';
+			}
+
+			print_json($status,$message,$response);
+		}
+	}
+
+	function open_notif()
+	{
+		$auth = $this->token->auth('POST', true);
+		if($auth) {
+			$params = get_params();
+			$response = [];
+			$id = isset($params['id']) ? $params['id'] : '';
+			
+			$save = $this->Main_Model->process_data('log_notifikasi', ['status' => 0], ['id' => $id]);
+
+			if(!empty($save)) {
+				$status = 200;
+				$message = 'Data Berhasil Disimpan';
+			}else{
+				$status = 404;
+				$message = 'Data Gagal Disimpan';
+			}
+
+			print_json($status,$message,$response);
+		}
+	}
+
+	function count_notif()
+	{
+		$auth = $this->token->auth('POST', true);
+		if($auth) {
+			$params = get_params();
+			$nij = isset($params['nij']) ? $params['nij'] : '';
+			$status = isset($params['status']) ? $params['status'] : '';
+			
+			$response = $this->Main_Model->view_by_id('log_notifikasi', ['nij' => $nij, 'status' => $status], 'num_rows');
+
+			if(!empty($response)) {
+				$status = 200;
+				$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+				$message = 'Data Tidak Ditemukan';
+			}
+
+			print_json($status,$message,$response);
+		}
+	}
+
+	function list_birthday()
+	{
+		$auth = $this->token->auth('GET', true);
+		if($auth) {
+
+			$response = $this->Notifikasi_Model->get_birthday();
+
+			if(!empty($response)) {
+				$status = 200;
+				$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+				$message = 'Data Tidak Ditemukan';
+			}
+		    
+			print_json($status,$message,$response);
+		}
+	}
+
 }

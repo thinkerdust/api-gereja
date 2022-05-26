@@ -62,4 +62,36 @@
     </section>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper
+  <!-- /.content-wrapper -->
+
+  <div class="modal" tabindex="-1" id="modal_warta">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">List Konfirmasi Warta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>NIJ</th>
+                <th>Nama</th>
+                <th>Posisi</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="dt_warta">
+              
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

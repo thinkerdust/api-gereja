@@ -56,4 +56,22 @@ class Cronjob extends CI_Controller {
 			}
 		}
 	}
+
+	function notif_birthday()
+	{
+		$date = date('Y-m-d');
+		$data = $this->Main_Model->view_by_id('profil', ['tgl_lahir' => $date], 'result');
+
+		if(!empty($data)) {
+			foreach($data as $key) {
+				$title = 'Happy Birthday '.$key->nama;
+				$body = 'Semoga kamu selalu dalam lindungan Tuhan Yesus. Doa terbaik dari kami, kami panjatkan untukmu. Happy birthday.';
+				$user = $this->Main_Model->view_by_id('user', ['flag' => 1, 'fcm_id !=' => ''], 'result');
+				foreach ($user as $row) {
+					$token = $row->fcm_id;
+					$this->customcurl->fcm('notif',$token,$title,$body);
+				}
+			}
+		}
+	}
 }

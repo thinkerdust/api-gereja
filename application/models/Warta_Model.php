@@ -79,7 +79,7 @@ class Warta_Model extends CI_Model {
 				$date = local_date_format($datetime[0]);
 
 				$title = 'Update Warta';
-				$body = 'Shalom Jemaat yang dikasihi Tuhan, jangan lupa datang ibadah ya pada '.$date.' Pukul: .'.$time.'. . Tuhan Yesus Memberkati';
+				$body = 'Shalom Jemaat yang dikasihi Tuhan, jangan lupa datang ibadah ya pada '.$date.' Pukul: '.$time.' . Tuhan Yesus Memberkati';
 				$fcm = $row->fcm_id;
 				$data = $this->view_warta($id);
 				
@@ -95,6 +95,16 @@ class Warta_Model extends CI_Model {
 			$body =  $nama.' telah merekomendasikan anda untuk menggantikannya, konfirmasi jika setuju';
 			$this->customcurl->fcm('warta',$fcm,$title,$body,'',$data);
 		}
+	}
+
+	function list_konfirmasi_warta($id_warta = 0)
+	{
+		$query = $this->db->query("SELECT naw.nij, j.nama, naw.posisi, 
+									if(naw.approval = 0, 'Belum Konfirmasi', 'Approved') as approval
+								from notif_approval_warta naw
+								join jemaat j on naw.nij = j.nij 
+								where naw.id_warta = '$id_warta' and naw.approval != 1")->result();
+		return $query;
 	}
 
 }

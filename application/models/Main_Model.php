@@ -120,14 +120,24 @@ class Main_Model extends CI_Model {
 
     function get_nama($nij = '')
     {
-        $data = $this->view_by_id('jemaat', ['nij' => $nij]);
+        $data = $this->view_by_id('jemaat', ['nij' => $nij, 'flag' => 1]);
         return $data->nama; 
     }
 
     function get_fcm($nij = '')
     {
-        $data = $this->view_by_id('user', ['nij' => $nij, 'fcm_id !=' => '']);
-        return $data->fcm_id; 
+        $data = $this->view_by_id('user', ['nij' => $nij, 'fcm_id !=' => '', 'flag' => 1]);
+        if(!empty($data)) {
+            return $data->fcm_id; 
+        }
+    }
+
+    function nij_user($token = '')
+    {
+        $data = $this->view_by_id('user', ['fcm_id' => $token, 'flag' => 1]);
+        if(!empty($data)) {
+            return $data->nij; 
+        }
     }
 
 }

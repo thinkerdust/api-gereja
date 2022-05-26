@@ -7,6 +7,7 @@ class Master extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->library('upload');
+		$this->load->helper('download');
 		$this->Main_Model->cek_login();
 	}
 
@@ -31,8 +32,14 @@ class Master extends CI_Controller {
             $data = $this->Main_Model->view_by_id('jemaat', ['flag' => 1], 'result');
             if(!empty($data)){
             	foreach($data as $row => $val){
-            		$action = '<a href="'.base_url().'master/form_jemaat/'.$val->nij.'" class="btn btn-warning">Edit</a>
-                        <a href="'.base_url().'master/delete_jemaat/'.$val->nij.'" class="btn btn-danger">Hapus</a>';
+            		$action = '<a href="'.base_url().'master/form_jemaat/'.$val->nij.'" class="btn btn-outline-primary btn-sm" title="edit"><i class="fas fa-edit"></i></a>
+                        <a href="'.base_url().'master/delete_jemaat/'.$val->nij.'" class="btn btn-outline-primary btn-sm" title="hapus"><i class="fas fa-trash"></i></a>';
+
+                        if(empty($val->qr_code)){
+                        	$action .= ' <a href="'.base_url().'master/generate_qrcode/'.$val->nij.'" class="btn btn-outline-primary btn-sm" title="generate qr"><i class="fas fa-qrcode"></i></a>';
+                        }else{
+                        	$action .= ' <a href="'.base_url().'master/download_qr/'.$val->qr_code.'" class="btn btn-outline-primary btn-sm" title="show qr"><i class="fas fa-qrcode"></i></a>';
+                        }
 
             		$arr[$row] = array(
                         $no++,
@@ -153,6 +160,54 @@ class Master extends CI_Controller {
 		$this->session->set_flashdata('alert', $alert);
     	redirect(base_url('master/jemaat'), 'refresh');
 	}
+
+	public function download_qr($file){				
+		force_download('./assets/qrcode/'.$file,NULL);
+	}
+
+	function qr_code($filename = '', $data)
+    {
+        $this->load->library('ciqrcode');
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']     = './assets/'; //string, the default is application/cache/
+        $config['errorlog']     = './assets/'; //string, the default is application/logs/
+        $config['imagedir']     = './assets/qrcode/'; //direktori penyimpanan qr code
+        $config['quality']      = true; //boolean, the default is true
+        $config['size']         = '1024'; //interger, the default is 1024
+        $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+        $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+ 
+        $image_name = $filename.'.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = $data; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params);
+        return $image_name;
+    }
+
+    function generate_qrcode($nij)
+    {
+    	$lokasi = $this->db->query("SELECT * from lokasi order by id desc")->row();
+    	$data = array(
+    				"nij" => $nij,
+    				"id_lokasi" => $lokasi->id
+    			);
+
+		// generate qr code
+		$qrcode = $this->qr_code($nij, $data);
+		$this->Main_Model->process_data('jemaat', ['qr_code' => $qrcode], ['nij' => $nij]);
+		$alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+		              <strong>Sukses!</strong> Generate QR Code Berhasil!
+		              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
+		              </button>
+		            </div>';
+		$this->session->set_flashdata('alert', $alert);
+    	redirect(base_url('master/jemaat'), 'refresh');
+    }
 
 	public function renungan()
 	{
@@ -609,8 +664,8 @@ class Master extends CI_Controller {
             $data = $this->Main_Model->view_by_id('ms_warta', ['flag' => 1], 'result');
             if(!empty($data)){
             	foreach($data as $row => $val){
-            		$action = '<a href="'.base_url().'master/form_ms_warta/'.$val->id.'" class="btn btn-warning">Edit</a>
-                        <a href="'.base_url().'master/delete_ms_warta/'.$val->id.'" class="btn btn-danger">Hapus</a>';
+            		$action = '<a href="'.base_url().'master/form_ms_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm" title="edit"><i class="fas fa-edit"></i></a>
+                        <a href="'.base_url().'master/delete_ms_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm" title="hapus"><i class="fas fa-trash"></i></a>';
 
                     $deskripsi = $val->deskripsi;
                     if(strlen($deskripsi) > 200){

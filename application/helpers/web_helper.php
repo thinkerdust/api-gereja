@@ -69,4 +69,11 @@
         $nama = $ci->Main_Model->get_fcm($nij);
         return $nama;
     }
+
+    function nij($token)
+    {
+        $ci =& get_instance();
+        $nij = $ci->Main_Model->nij_user($token);
+        return $nij;
+    }
 ?>

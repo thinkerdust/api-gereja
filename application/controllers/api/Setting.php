@@ -10,7 +10,7 @@ class Setting extends CI_Controller {
 
 	function profil()
 	{
-		$auth = $this->token->auth('GET', true);
+		$auth = $this->token->auth('GET', false);
 		if($auth) {
 			$user_id = $this->input->get_request_header('User-Id');
 			$response = $this->Setting_Model->view_profil($user_id);
@@ -40,6 +40,7 @@ class Setting extends CI_Controller {
 			$no_telp = isset($params['no_telp']) ? $params['no_telp'] : '';
 			$alamat = isset($params['alamat']) ? $params['alamat'] : '';
 			$gender = isset($params['gender']) ? $params['gender'] : '';
+			$tgl_lahir = isset($params['tgl_lahir']) ? $params['tgl_lahir'] : '';
 			$response = [];
 
 			$data = array(
@@ -49,7 +50,8 @@ class Setting extends CI_Controller {
 					'email' => $email,
 					'no_telp' => $no_telp,
 					'alamat' => $alamat,
-					'gender' => $gender
+					'gender' => $gender,
+					'tgl_lahir' => $tgl_lahir,
 				);
 			if(!empty($id)){
                 $data['update_at'] = date('Y-m-d H:i:s');
@@ -149,7 +151,7 @@ class Setting extends CI_Controller {
 		$auth = $this->token->auth('GET', true);
 		if($auth) {
 
-			$response = $this->Main_Model->view_by_id('jemaat', ['flag' => 1]);
+			$response = $this->Main_Model->view_by_id('jemaat', ['flag' => 1], 'result');
 
 			if(!empty($response)) {
 				$status = 200;

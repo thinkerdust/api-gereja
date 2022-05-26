@@ -25,3 +25,29 @@ var table = $("#tabel").DataTable({
     ],
     pageLength: 10,
 });
+
+function list_konfirmasi(id) {
+    $('#modal_warta').modal('show');
+    $.ajax({
+        url: base_url + 'warta/list_konfirmasi/' + id,
+        type: 'GET',
+        dataType: 'JSON',
+        success: function(data){
+            let html = '';
+            data.forEach (function(value, key) {
+                html += `<tr>
+                            <td>${key+1}</td>
+                            <td>${value.nij}</td>
+                            <td>${value.nama}</td>
+                            <td>${value.posisi}</td>
+                            <td>${value.approval}</td>
+                        </tr>`;
+            });
+            $('#dt_warta').html(html);
+
+        },
+        error: function(error) {
+            console.log(error)
+        }
+    })
+}

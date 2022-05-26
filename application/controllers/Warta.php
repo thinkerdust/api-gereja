@@ -31,9 +31,11 @@ class Warta extends CI_Controller {
 			$data = $this->db->order_by('insert_at', 'desc')->where('flag', 1)->get('warta')->result();
 			if(!empty($data)){
 				foreach($data as $row => $val){
-					$action = '<a href="'.base_url().'warta/form_warta/'.$val->id.'" class="btn btn-warning">Edit</a>
-									<a href="'.base_url().'warta/notif_warta/'.$val->id.'" class="btn btn-info">Notif</a>
-									<a href="'.base_url().'warta/delete_warta/'.$val->id.'" class="btn btn-danger">Hapus</a>';
+					$action = '<a href="'.base_url().'warta/form_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="edit"><i class="fas fa-edit"></i></a>
+						<a href="'.base_url().'warta/notif_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="notif"><i class="fas fa-bell"></i></a>
+						<a href="'.base_url().'warta/delete_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="hapus"><i class="fas fa-trash"></i></a>
+						<a href="'.base_url().'warta/delete_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="hapus"><i class="fas fa-trash"></i></a>
+						<a href="#" onclick="list_konfirmasi('.$val->id.')" class="btn btn-outline-primary btn-sm my-1" title="list konfirmasi"><i class="fas fa-address-card"></i></a>';
 
 					$datetime = explode(' ', $val->tanggal);
 					$time = date('H:i', strtotime($datetime[1]));
@@ -65,7 +67,7 @@ class Warta extends CI_Controller {
 		$sidebar['sidebar'] = 'warta';
 
 		$data['data'] = $this->Main_Model->view_by_id('warta', ['id'=>$id]);
-		$data['jemaat'] = $this->Main_Model->view_by_id('jemaat', ['flag' => 1], 'result');
+		$data['jemaat'] = $this->Main_Model->view_by_id('jemaat', ['flag' => 1, 'user_level' => 3], 'result');
 		$data['ms_warta'] = $this->Main_Model->view_by_id('ms_warta', ['flag' => 1], 'result');
 		$data['musik'] = $this->Main_Model->view_by_id('tim_musik', ['id_warta' => $id]);
 		$data['alert'] = $this->session->flashdata('alert');
@@ -149,14 +151,16 @@ class Warta extends CI_Controller {
 		$this->db->insert('tim_musik', $tim_musik);
 
 		$data_pokok_doa = [];
-		foreach($pokok_doa as $row){
-			$data_pokok_doa[] = array(
-								'id_warta' => $id_warta,
-								'id_ms_warta' => $row,
-							);
+		if(!empty($pokok_doa)) {
+			foreach($pokok_doa as $row){
+				$data_pokok_doa[] = array(
+									'id_warta' => $id_warta,
+									'id_ms_warta' => $row,
+								);
+			}
+			$this->db->insert_batch('warta_detail', $data_pokok_doa);
 		}
 
-		$this->db->insert_batch('warta_detail', $data_pokok_doa);
 
 		$tgl_notif = date('Y-m-d', strtotime($tanggal));
 		$tgl_notif = date('Y-m-d H:i:s', strtotime($tgl_notif.' -4 day'.' 19:00:00'));
@@ -289,5 +293,13 @@ class Warta extends CI_Controller {
 						</div>';
 		$this->session->set_flashdata('alert', $alert);
 			redirect(base_url('warta'), 'refresh');
+	}
+
+	public function list_konfirmasi($id)
+	{
+		
+		$data =  $this->Warta_Model->list_konfirmasi_warta($id);
+		echo json_encode($data);
+
 	}
 }
