@@ -46,7 +46,7 @@ class Main_Model extends CI_Model {
 
     function send_message($number, $message = 'hello')
     {
-        $url = "https://lmao.my.id/api/message";
+        $url = "http://lmao.my.id/api/message";
 
         $api_key = '466f834b8184a63783201fffdf6723f227d8695aabf624';
         $device_id = 157;
