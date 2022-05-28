@@ -34,7 +34,6 @@ class Warta extends CI_Controller {
 					$action = '<a href="'.base_url().'warta/form_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="edit"><i class="fas fa-edit"></i></a>
 						<a href="'.base_url().'warta/notif_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="notif"><i class="fas fa-bell"></i></a>
 						<a href="'.base_url().'warta/delete_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="hapus"><i class="fas fa-trash"></i></a>
-						<a href="'.base_url().'warta/delete_warta/'.$val->id.'" class="btn btn-outline-primary btn-sm my-1" title="hapus"><i class="fas fa-trash"></i></a>
 						<a href="#" onclick="list_konfirmasi('.$val->id.')" class="btn btn-outline-primary btn-sm my-1" title="list konfirmasi"><i class="fas fa-address-card"></i></a>';
 
 					$datetime = explode(' ', $val->tanggal);

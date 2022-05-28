@@ -32,8 +32,7 @@ class Notifikasi_Model extends CI_Model {
 		$path_file = base_url().'assets/upload/images/';
 		$date = date('Y-m-d');
 
-		$data = $this->db->query("SELECT p.*, concat('$path_file', p.photo) as file_path, 
-									u.nij
+		$data = $this->db->query("SELECT p.*, concat('$path_file', p.photo) as file_path
 								from profil p
 								where p.tgl_lahir = '$date' ")->result();
 		return $data;
