@@ -46,7 +46,7 @@
               </div>
               <div class="form-group">
                 <label>Upload Gambar</label>
-                <input type="file" name="gambar" id="gambar" class="form-control" accept="png,jpg,jpeg">
+                <input type="file" name="gambar" id="gambar" class="form-control" accept=".png,.jpg,.jpeg">
                 <span class="text-muted">*kosongi jika tidak ingin mengganti</span>
                 <?php if(!empty($data->image)):?>
                 <a target="_blank" href="<?php echo base_url('assets/upload/images/'.$data->image)?>">

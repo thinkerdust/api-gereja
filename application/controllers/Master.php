@@ -257,7 +257,6 @@ class Master extends CI_Controller {
 	public function form_renungan($id = '')
 	{
 		$sidebar['sidebar'] = 'renungan';
-		$foot['js'] = '';
 
 		$data['data'] = $this->Main_Model->view_by_id('renungan', ['id'=>$id]);
 		$data['alert'] = $this->session->flashdata('alert');
@@ -265,7 +264,7 @@ class Master extends CI_Controller {
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $sidebar);
 		$this->load->view('master/form_renungan', $data);
-		$this->load->view('template/footer', $foot);
+		$this->load->view('template/footer');
 	}
 
 	public function store_renungan()

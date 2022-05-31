@@ -30,11 +30,12 @@ class Notifikasi_Model extends CI_Model {
 	function get_birthday()
 	{
 		$path_file = base_url().'assets/upload/images/';
-		$date = date('Y-m-d');
+		$start_date = date('Y-m-d');
+		$end_date = date('Y-m-t');
 
 		$data = $this->db->query("SELECT p.*, concat('$path_file', p.photo) as file_path
 								from profil p
-								where p.tgl_lahir = '$date' ")->result();
+								where p.tgl_lahir between '$start_date' and '$end_date' ")->result();
 		return $data;
 	}
 
