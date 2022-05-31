@@ -35,7 +35,8 @@ class Notifikasi_Model extends CI_Model {
 
 		$data = $this->db->query("SELECT p.*, concat('$path_file', p.photo) as file_path
 								from profil p
-								where p.tgl_lahir between '$start_date' and '$end_date' ")->result();
+								where p.tgl_lahir between '$start_date' and '$end_date' 
+								order by p.tgl_lahir desc")->result();
 		return $data;
 	}
 
