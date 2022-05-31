@@ -34,7 +34,7 @@ class Warta extends CI_Controller {
 			$params = get_params();
 			$id_warta = isset($params['id_warta']) ? $params['id_warta'] : '';
 			$nij = isset($params['nij']) ? $params['nij'] : '';
-			$notif = $this->Main_Model->view_by_id('notif_approval_warta', ['nij' => $nij, 'id_warta' => $id_warta, 'flag' => 1, 'approval' => 0]);
+			$notif = $this->Main_Model->view_by_id('notif_approval_warta', ['nij' => $nij, 'id_warta' => $id_warta, 'approval' => 0]);
 			$warta = $this->Main_Model->view_by_id('warta', ['flag' => 1, 'id' => $id_warta]);
 			$datetime = explode(' ', $warta->tanggal);
 			$date = $datetime[0];
@@ -89,7 +89,7 @@ class Warta extends CI_Controller {
 			$alasan = isset($params['alasan']) ? $params['alasan'] : '';
 
 			if($nij && $approval){
-				$get_notif = $this->Main_Model->view_by_id('notif_approval_warta', ['flag' => 1, 'approval' => 0, 'nij' => $nij, 'id_warta' => $id_warta]);
+				$get_notif = $this->Main_Model->view_by_id('notif_approval_warta', [ 'approval' => 0, 'nij' => $nij, 'id_warta' => $id_warta]);
 
 				if($get_notif) {
 					$kolom = $get_notif->kolom;
@@ -103,7 +103,7 @@ class Warta extends CI_Controller {
 						$cond = '_warta';
 					}
 
-					$this->Main_Model->process_data('notif_approval_warta', ['flag' => 0, 'approval' => $approval, 'update_at' => date('Y-m-d H-i-s')], ['id' => $get_notif->id]);
+					$this->Main_Model->process_data('notif_approval_warta', ['approval' => $approval, 'update_at' => date('Y-m-d H-i-s')], ['id' => $get_notif->id]);
 
 					// 0:new ; 1: reject ; 2:approve
 					if($approval == 2) {
