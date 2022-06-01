@@ -43,4 +43,18 @@ class Sharing_Model extends CI_Model {
 		}
 		return $data;
 	}
+
+	function view_comment($id_sharing = 0)
+	{
+		$path_file = base_url().'assets/upload/images/';
+
+		$query = $this->db->query("
+					SELECT cs.*, concat('$path_file', p.photo) as photo
+					from comment_sharing cs
+					left join profil p on cs.nij = p.nij
+					where cs.id_sharing = $id_sharing
+					")->result();
+
+		return $query;
+	}
 }

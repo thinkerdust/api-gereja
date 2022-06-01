@@ -155,14 +155,14 @@ class Sharing extends CI_Controller {
 
 	function comment()
 	{
-		$auth = $this->token->auth('POST', true);
+		$auth = $this->token->auth('POST', false);
 		if($auth) {
 			$params = get_params();
 			$id_sharing = isset($params['id_sharing']) ? $params['id_sharing'] : '';
 			$flag = isset($params['flag']) ? $params['flag'] : '';
 
 			if($flag == 1) {
-				$response = $this->Main_Model->view_by_id('comment_sharing', ['id_sharing' => $id_sharing],'result');
+				$response = $this->Sharing_Model->view_comment($id_sharing);
 			}else{	
 				$response = $this->Main_Model->view_by_id('comment_sharing', ['id_sharing' => $id_sharing],'num_rows');
 			}
