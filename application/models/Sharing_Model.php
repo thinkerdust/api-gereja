@@ -24,6 +24,12 @@ class Sharing_Model extends CI_Model {
 					$foto = $path_file.$profil->photo;
 				}
 
+
+				$files = $this->db->where("id_sharing", $row->id)->get("file_sharing")->result();
+				foreach($files as $key) {
+					$arr_files[] = $path_file.$key->filename;
+				}
+
 				$data[] = [
 							"id" => $row->id,
 							"nij" => $row->nij,
@@ -31,17 +37,8 @@ class Sharing_Model extends CI_Model {
 							"insert_at" => $row->insert_at,
 							"insert_by" => $row->insert_by,
 							"foto_profil" => $foto,
+							"files" => $arr_files
 						];
-
-				$files = $this->db->where("id_sharing", $row->id)->get("file_sharing")->result();
-				if(!empty($files)) {
-					$arr_files = [];
-					foreach($files as $key) {
-						$arr_files[] = $path_file.$key->filename;
-					}
-
-					$data[]["files"] = $arr_files;
-				}
 			}
 		}
 		return $data;

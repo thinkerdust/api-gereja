@@ -87,9 +87,9 @@ class Sharing extends CI_Controller {
 			$flag = isset($params['flag']) ? $params['flag'] : '';
 
 			if($flag == 1) {
-				$this->Main_Model->process_data('like_sharing', ["id_sharing" => $id_sharing, "nij" => $nij, "insert_by" => $user]);
+				$save = $this->Main_Model->process_data('like_sharing', ["id_sharing" => $id_sharing, "nij" => $nij, "insert_by" => $user]);
 			}else{
-				$this->Main_Model->delete_data('like_sharing', ["nij" => $nij, "id_sharing" => $id_sharing]);
+				$save = $this->Main_Model->delete_data('like_sharing', ["nij" => $nij, "id_sharing" => $id_sharing]);
 			}
 
 			if($save){
@@ -117,9 +117,9 @@ class Sharing extends CI_Controller {
 			$flag = isset($params['flag']) ? $params['flag'] : '';
 
 			if($flag == 1) {
-				$this->Main_Model->process_data('comment_sharing', ["id_sharing" => $id_sharing, "nij" => $nij, "comment" => $comment, "insert_by" => $user]);
+				$save = $this->Main_Model->process_data('comment_sharing', ["id_sharing" => $id_sharing, "nij" => $nij, "comment" => $comment, "insert_by" => $user]);
 			}else{
-				$this->Main_Model->delete_data('comment_sharing', ["nij" => $nij, "id_sharing" => $id_sharing]);
+				$save = $this->Main_Model->delete_data('comment_sharing', ["nij" => $nij, "id_sharing" => $id_sharing]);
 			}
 
 			if($save){
