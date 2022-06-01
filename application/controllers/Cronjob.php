@@ -38,6 +38,9 @@ class Cronjob extends CI_Controller {
 					$this->Main_Model->process_data('notif_approval_warta', ['flag' => 0], ['id_warta' => $id_warta]);
 				}
 			}
+
+			// log cronjob
+			$this->Main_Model->process_data('log_cronjob', ['function' => 'cronjob/send_approval_warta']);
 		}
 	}
 
@@ -54,6 +57,9 @@ class Cronjob extends CI_Controller {
 					$this->Main_Model->process_data('warta', ['flag' => 0], ['id' => $key->id]);
 				}
 			}
+
+			// log cronjob
+			$this->Main_Model->process_data('log_cronjob', ['function' => 'cronjob/change_flag']);
 		}
 	}
 
@@ -72,6 +78,9 @@ class Cronjob extends CI_Controller {
 					$this->customcurl->fcm('notif',$token,$title,$body);
 				}
 			}
+
+			// log cronjob
+			$this->Main_Model->process_data('log_cronjob', ['function' => 'cronjob/notif_birthday']);
 		}
 	}
 }

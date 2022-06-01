@@ -21,9 +21,10 @@ class Main_Model extends CI_Model {
         }
     }
 
-    function delete_data($table='', $condition='')
+    function delete_data($table = '', $condition = '')
     {
-        return $this->db->delete($table, $condition); 
+        $this->db->where($condition)->delete($table);
+        return $this->db->affected_rows();
     }
 
     function view_by_id($table='',$condition='',$row='row')
