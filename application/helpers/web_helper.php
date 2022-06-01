@@ -76,4 +76,11 @@
         $nij = $ci->Main_Model->nij_user($token);
         return $nij;
     }
+
+    function profile($nij)
+    {
+        $ci =& get_instance();
+        $data = $ci->Main_Model->profile($nij);
+        return $data;
+    }
 ?>

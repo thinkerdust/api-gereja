@@ -34,7 +34,7 @@ class Warta extends CI_Controller {
 			$params = get_params();
 			$id_warta = isset($params['id_warta']) ? $params['id_warta'] : '';
 			$nij = isset($params['nij']) ? $params['nij'] : '';
-			$notif = $this->Main_Model->view_by_id('notif_approval_warta', ['nij' => $nij, 'id_warta' => $id_warta, 'approval' => 0]);
+			$notif = $this->Main_Model->view_by_id('notif_approval_warta', ['nij' => $nij, 'id_warta' => $id_warta]);
 			$warta = $this->Main_Model->view_by_id('warta', ['flag' => 1, 'id' => $id_warta]);
 			$datetime = explode(' ', $warta->tanggal);
 			$date = $datetime[0];

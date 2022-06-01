@@ -21,6 +21,11 @@ class Main_Model extends CI_Model {
         }
     }
 
+    function delete_data($table='', $condition='')
+    {
+        return $this->db->delete($table, $condition); 
+    }
+
     function view_by_id($table='',$condition='',$row='row')
     {
         if($row == 'row') {
@@ -129,6 +134,8 @@ class Main_Model extends CI_Model {
         $data = $this->view_by_id('user', ['nij' => $nij, 'fcm_id !=' => '', 'flag' => 1]);
         if(!empty($data)) {
             return $data->fcm_id; 
+        }else{
+            return 0;
         }
     }
 
@@ -137,6 +144,18 @@ class Main_Model extends CI_Model {
         $data = $this->view_by_id('user', ['fcm_id' => $token, 'flag' => 1]);
         if(!empty($data)) {
             return $data->nij; 
+        }else{
+            return 0;
+        }
+    }
+
+    function profile($nij = '')
+    {
+        $data = $this->view_by_id('profil', ['nij' => $nij]);
+        if(!empty($data)) {
+            return $data; 
+        }else{
+            return 0;
         }
     }
 

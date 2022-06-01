@@ -34,6 +34,7 @@ class Setting extends CI_Controller {
 			$user_id = $this->input->get_request_header('User-Id');
 			$username = $this->input->get_request_header('Username');
 			$id = isset($params['id']) ? $params['id'] : '';
+			$nij = isset($params['nij']) ? $params['nij'] : '';
 			$photo = isset($params['photo']) ? $params['photo'] : '';
 			$nama = isset($params['nama']) ? $params['nama'] : '';
 			$email = isset($params['email']) ? $params['email'] : '';
@@ -45,6 +46,7 @@ class Setting extends CI_Controller {
 
 			$data = array(
 					'user_id' => $user_id,
+					'nij' => $nij,
 					'nama' => $nama,
 					'photo' => $photo,
 					'email' => $email,
