@@ -12,6 +12,7 @@ class Sharing_Model extends CI_Model {
 
 		$sharing = $this->db->query("SELECT * from sharing s
 						where flag = 1
+						order by id desc
 						$limit")->result();
 
 		$data = [];
@@ -26,6 +27,7 @@ class Sharing_Model extends CI_Model {
 
 
 				$files = $this->db->where("id_sharing", $row->id)->get("file_sharing")->result();
+				$arr_files = [];
 				foreach($files as $key) {
 					$arr_files[] = $path_file.$key->filename;
 				}
@@ -53,6 +55,7 @@ class Sharing_Model extends CI_Model {
 					from comment_sharing cs
 					left join profil p on cs.nij = p.nij
 					where cs.id_sharing = $id_sharing
+					order by id desc
 					")->result();
 
 		return $query;
