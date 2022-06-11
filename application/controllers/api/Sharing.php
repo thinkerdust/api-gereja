@@ -60,7 +60,7 @@ class Sharing extends CI_Controller {
 				$this->db->trans_complete();
 
 				if($this->db->trans_status() === TRUE){
-					$this->Sharing_Model->send_notif($sharing
+					$this->Sharing_Model->send_notif($sharing);
 					$status = 200;
 					$message = 'Data Berhasil Disimpan';
 				}else{
