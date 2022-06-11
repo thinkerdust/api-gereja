@@ -15,8 +15,9 @@ class Sharing extends CI_Controller {
 			$params = get_params();
 			$start = isset($params['start']) ? $params['start'] : 0;
 			$count = isset($params['count']) ? $params['count'] : 0;
+			$nij = isset($params['nij']) ? $params['nij'] : 0;
 
-			$response = $this->Sharing_Model->view_sharing($start,$count);
+			$response = $this->Sharing_Model->view_sharing($start,$count,$nij);
 
 			if(!empty($response)) {
 				$status = 200;
@@ -155,7 +156,7 @@ class Sharing extends CI_Controller {
 
 	function comment()
 	{
-		$auth = $this->token->auth('POST', false);
+		$auth = $this->token->auth('POST', true);
 		if($auth) {
 			$params = get_params();
 			$id_sharing = isset($params['id_sharing']) ? $params['id_sharing'] : '';

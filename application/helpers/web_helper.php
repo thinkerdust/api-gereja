@@ -70,7 +70,7 @@
         return $nama;
     }
 
-    function nij($token)
+    function token($token)
     {
         $ci =& get_instance();
         $nij = $ci->Main_Model->nij_user($token);
@@ -81,6 +81,14 @@
     {
         $ci =& get_instance();
         $data = $ci->Main_Model->profile($nij);
+        return $data;
+    }
+
+    function profil_login()
+    {
+        $ci =& get_instance();
+        $user_id = $ci->input->get_request_header('User-Id');
+        $data = $ci->Main_Model->view_by_id('profil', ['user_id' => $user_id]);
         return $data;
     }
 ?>

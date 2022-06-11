@@ -49,7 +49,7 @@ class Customcurl
         $message_id = $decode['results'][0]['message_id'];
         $ins = $ci->db->insert('log_notifikasi', [
                     'token' => $token, 
-                    'nij' => nij($token),
+                    'nij' => token($token),
                     'message_id'=> $message_id,
                     'title' => $title,
                     'body'=> $body,
