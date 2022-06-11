@@ -42,6 +42,9 @@ class Sharing_Model extends CI_Model {
 				// count like
 				$jml_like = $this->db->where("id_sharing", $row->id)->get("like_sharing")->num_rows();
 
+				// count comment
+				$jml_comment = $this->db->where("id_sharing", $row->id)->get("comment_sharing")->num_rows();
+
 				// status like by nij login
 				$flag_like = $this->db->where(["id_sharing" => $row->id, "nij" => $sess->nij])->get("like_sharing")->row();
 
@@ -49,6 +52,7 @@ class Sharing_Model extends CI_Model {
 							"id" => $row->id,
 							"nij" => $row->nij,
 							"deskripsi" => $row->deskripsi,
+							"jml_comment" => $jml_comment,
 							"jml_like" => $jml_like,
 							"flag_like" => (empty($flag_like)) ? false:true,
 							"insert_at" => $row->insert_at,
@@ -74,5 +78,21 @@ class Sharing_Model extends CI_Model {
 					")->result();
 
 		return $query;
+	}
+
+	function send_notif($id = 0)
+	{
+		$user = $this->db->where(['flag' => 1, 'fcm_id !=' => ''])->get('user')->result();
+		if(!empty($user)){
+
+			foreach($user as $row){
+				$token = $row->fcm_id;
+				$table = $this->db->where('id', $id)->get('sharing')->row();
+				$title = "Update Sharing";
+				$body = $table->deskripsi;
+
+				$this->customcurl->fcm('sharing',$token,$title,$body);
+			}
+		}
 	}
 }

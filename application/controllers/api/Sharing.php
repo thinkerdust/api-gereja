@@ -10,7 +10,7 @@ class Sharing extends CI_Controller {
 
 	function index()
 	{
-		$auth = $this->token->auth('POST', true);
+		$auth = $this->token->auth('POST', false);
 		if($auth) {
 			$params = get_params();
 			$start = isset($params['start']) ? $params['start'] : 0;
@@ -60,6 +60,7 @@ class Sharing extends CI_Controller {
 				$this->db->trans_complete();
 
 				if($this->db->trans_status() === TRUE){
+					$this->Sharing_Model->send_notif($sharing
 					$status = 200;
 					$message = 'Data Berhasil Disimpan';
 				}else{
