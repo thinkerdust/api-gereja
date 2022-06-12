@@ -77,6 +77,41 @@ class Sharing extends CI_Controller {
 		}
 	}
 
+	function delete_sharing()
+	{
+		$auth = $this->token->auth('POST', true);
+		if($auth) { 
+			$params = get_params();
+			$response = [];
+			$id_sharing = isset($params['id_sharing']) ? $params['id_sharing'] : '';
+
+			if($id_sharing) {
+				$this->db->trans_start();
+
+				$this->Main_Model->delete_data('sharing', ['id' => $id_sharing]);
+				$this->Main_Model->delete_data('file_sharing', ['id_sharing' => $id_sharing]);
+				$this->Main_Model->delete_data('like_sharing', ['id_sharing' => $id_sharing]);
+				$this->Main_Model->delete_data('comment_sharing', ['id_sharing' => $id_sharing]);
+
+				$this->db->trans_complete();
+
+				if($this->db->trans_status() === TRUE){
+					$status = 200;
+					$message = 'Data Berhasil Dihapus';
+				}else{
+					$status = 404;
+					$message = 'Data Gagal Dihapus';
+				}
+
+			}else{
+				$status = 400;
+				$message = 'Data Tidak Boleh Kosong';
+			}
+
+			print_json($status,$message,$response);
+		}
+	}
+
 	function store_like()
 	{
 		$auth = $this->token->auth('POST', true);
