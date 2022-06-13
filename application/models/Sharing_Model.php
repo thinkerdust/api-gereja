@@ -80,18 +80,17 @@ class Sharing_Model extends CI_Model {
 		return $query;
 	}
 
-	function send_notif($id = 0)
+	function send_notif($id = 0, $flag = '', $title = '')
 	{
 		$user = $this->db->where(['flag' => 1, 'fcm_id !=' => ''])->get('user')->result();
 		if(!empty($user)){
 
 			foreach($user as $row){
 				$token = $row->fcm_id;
-				$table = $this->db->where('id', $id)->get('sharing')->row();
-				$title = "Update Sharing";
+				$table = $this->db->where('id', $id)->get($flag)->row();
 				$body = $table->deskripsi;
 
-				$this->customcurl->fcm('sharing',$token,$title,$body);
+				$this->customcurl->fcm($flag,$token,$title,$body);
 			}
 		}
 	}
