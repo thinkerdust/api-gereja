@@ -84,10 +84,14 @@
         return $data;
     }
 
-    function profil_login()
+    function profil_login($user_id = '')
     {
         $ci =& get_instance();
-        $user_id = $ci->input->get_request_header('User-Id');
+
+        if(empty($user_id)) {
+            $user_id = $ci->input->get_request_header('User-Id');
+        }
+        
         $data = $ci->Main_Model->view_by_id('profil', ['user_id' => $user_id]);
         return $data;
     }

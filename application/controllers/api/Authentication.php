@@ -171,10 +171,13 @@ GBT Kristus Alfa Omega";
 	                $token = isset($create_token['token']) ? $create_token['token'] : '';
 
 	                if($create_token){
+	                	$user_id = $user->id;
+	                	$profil = profil_login($user_id);
 	                	$status = 200;
 	                	$message = "Login berhasil";
 	                	$response = array(
-		                	'id' => $user->id,
+		                	'id' => $user_id,
+		                	'nij' => $profil->nij,
 		                	'nama' => $user->nama,
 		                	'username' => $user->username,
 		                	'user_level' => $user->user_level,
