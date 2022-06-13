@@ -11,7 +11,7 @@ class Renungan extends CI_Controller {
 
 	function renungan()
 	{
-		$auth = $this->token->auth('POST', false);
+		$auth = $this->token->auth('POST', true);
 		if($auth) {
 			$params = get_params();
 			$id = isset($params['id']) ? $params['id'] : '';

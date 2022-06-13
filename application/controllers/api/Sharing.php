@@ -10,7 +10,7 @@ class Sharing extends CI_Controller {
 
 	function index()
 	{
-		$auth = $this->token->auth('POST', false);
+		$auth = $this->token->auth('POST', true);
 		if($auth) {
 			$params = get_params();
 			$start = isset($params['start']) ? $params['start'] : 0;

@@ -10,7 +10,7 @@ class Setting extends CI_Controller {
 
 	function profil()
 	{
-		$auth = $this->token->auth('GET', false);
+		$auth = $this->token->auth('GET', true);
 		if($auth) {
 			$user_id = $this->input->get_request_header('User-Id');
 			$response = $this->Setting_Model->view_profil($user_id);
