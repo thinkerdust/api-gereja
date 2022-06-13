@@ -162,7 +162,6 @@ class Sharing extends CI_Controller {
 			}
 
 			if($save){
-				 (nama user) Mengomentari postingan (user yg membuat postingan)
 				$profil = profile($nij);
 				$sharing = $this->Main_Model->view_by_id('sharing', ['id' => $id_sharing]);
 				$profil_post = profile($sharing->nij);
