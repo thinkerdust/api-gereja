@@ -80,17 +80,40 @@ class Sharing_Model extends CI_Model {
 		return $query;
 	}
 
-	function send_notif($id = 0, $flag = '', $title = '')
+	function send_notif_sharing($id = 0)
 	{
 		$user = $this->db->where(['flag' => 1, 'fcm_id !=' => ''])->get('user')->result();
 		if(!empty($user)){
 
 			foreach($user as $row){
 				$token = $row->fcm_id;
-				$table = $this->db->where('id', $id)->get($flag)->row();
+				$table = $this->db->where('id', $id)->get('sharing')->row();
+				$profil = profile($table->nij);
+				$title = $profil->nama." mengUpload postingan 🖼️";
 				$body = $table->deskripsi;
 
-				$this->customcurl->fcm($flag,$token,$title,$body);
+				$this->customcurl->fcm('sharing',$token,$title,$body);
+			}
+		}
+	}
+
+	function send_notif_comment($id = 0)
+	{
+		$user = $this->db->where(['flag' => 1, 'fcm_id !=' => ''])->get('user')->result();
+		if(!empty($user)){
+
+			foreach($user as $row){
+				$token = $row->fcm_id;
+				$table = $this->db->where('id', $id)->get('comment_sharing')->row();
+				$profil = profile($table->nij);
+
+				$sharing = $this->Main_Model->view_by_id('sharing', ['id' => $id]);
+				$profil_post = profile($sharing->nij);
+				
+				$title = $profil->nama." Mengomentari postingan ".$profil_post->nama;
+				$body = $table->comment;
+
+				$this->customcurl->fcm('comment_sharing',$token,$title,$body);
 			}
 		}
 	}

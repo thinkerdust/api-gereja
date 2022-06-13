@@ -60,9 +60,7 @@ class Sharing extends CI_Controller {
 				$this->db->trans_complete();
 
 				if($this->db->trans_status() === TRUE){
-					$profil = profile($nij);
-					$title = $profil->nama." mengUpload postingan";
-					$this->Sharing_Model->send_notif($sharing, 'sharing', $title);
+					$this->Sharing_Model->send_notif_sharing($sharing);
 					$status = 200;
 					$message = 'Data Berhasil Disimpan';
 				}else{
@@ -157,16 +155,12 @@ class Sharing extends CI_Controller {
 
 			if($flag == 1) {
 				$save = $this->Main_Model->process_data('comment_sharing', ["id_sharing" => $id_sharing, "nij" => $nij, "comment" => $comment, "insert_by" => $user]);
+				$this->Sharing_Model->send_notif_comment($save);
 			}else{
 				$save = $this->Main_Model->delete_data('comment_sharing', ["nij" => $nij, "id_sharing" => $id_sharing]);
 			}
 
 			if($save){
-				$profil = profile($nij);
-				$sharing = $this->Main_Model->view_by_id('sharing', ['id' => $id_sharing]);
-				$profil_post = profile($sharing->nij);
-				$title = $profil->nama." Mengomentari postingan ".$profil_post->nama;
-				$this->Sharing_Model->send_notif($save, 'comment_sharing', $title);
                 $status = 200;
                 $message = 'Data berhasil disimpan';
             }else{
