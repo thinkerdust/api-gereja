@@ -3,7 +3,7 @@
   <aside class="main-sidebar sidebar-light-info elevation-4">
     <!-- Brand Logo -->
     <a href="<?php echo base_url();?>" class="brand-link text-center">
-      <span class="brand-text font-weight-light">GBT Kristus Alfa Omega</span>
+      <span class="brand-text font-weight-light">HELASTERION MINISTRY</span>
     </a>
 
     <!-- Sidebar -->

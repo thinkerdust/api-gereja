@@ -43,7 +43,7 @@
                     <th>Usher</th>
                     <th>Kolektan</th>
                     <th>Petugas LCD</th>
-                    <th>Termo Gun</th>
+                    <th>Multimedia</th>
                     <th width="15%">Action</th>
                   </tr>
                   </thead>

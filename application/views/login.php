@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Panel Admin | GBT Kristus Alfa Omega</title>
+  <title>Panel Admin | HELASTERION COMMUNITY CHURCH</title>
 
   <link rel="icon" type="image/x-icon" href="<?php echo base_url();?>assets/dist/img/AdminLTELogo.png">
 
@@ -40,7 +40,8 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="<?php echo base_url();?>" class="h3"><b>GBT Kristus Alfa Omega</b></a>
+      <a href="<?php echo base_url();?>" class="h3"><b>GEREJA BETH-EL TABERNAKEL</b></a>
+      <p>HELASTERION COMMUNITY CHURCH</p>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Silahkan Login Untuk Masuk Aplikasi</p>

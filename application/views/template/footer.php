@@ -1,6 +1,6 @@
 <!-- /.content-wrapper -->
   <footer class="main-footer" style="background-color: #17a2b8;color:#fff">
-    <strong>Copyright &copy; <?php echo date('Y')?> <a href="<?php echo base_url();?>" class="text-white">GBT Kristus Alfa Omega</a>.</strong>
+    <strong>Copyright &copy; <?php echo date('Y')?> <a href="<?php echo base_url();?>" class="text-white">GEREJA BETH-EL TABERNAKEL - HELASTERION COMMUNITY CHURCH</a>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1.0

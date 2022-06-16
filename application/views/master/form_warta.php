@@ -97,7 +97,7 @@
                     <input type="text" id="petugas_lcd" name="petugas_lcd" class="form-control" value="<?php echo (!empty($data)) ? $data->petugas_lcd:'';?>">
                   </div>
                   <div class="form-group">
-                    <label>Termo Gun</label>
+                    <label>Multimedia</label>
                     <input type="text" id="multimedia" name="multimedia" class="form-control" value="<?php echo (!empty($data)) ? $data->multimedia:'';?>">
                   </div>
                   <div class="form-group">

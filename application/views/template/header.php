@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Panel Admin | GBT Kristus Alfa Omega</title>
+  <title>Panel Admin | HELASTERION COMMUNITY CHURCH</title>
 
   <link rel="icon" type="image/x-icon" href="<?php echo base_url();?>assets/dist/img/AdminLTELogo.png">
 
