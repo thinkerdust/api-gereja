@@ -89,7 +89,7 @@ class Sharing_Model extends CI_Model {
 				$token = $row->fcm_id;
 				$table = $this->db->where('id', $id)->get('sharing')->row();
 				$profil = profile($table->nij);
-				$title = $profil->nama." mengUpload postingan 🖼️";
+				$title = $profil->nama." mengUpload postingan";
 				$body = $table->deskripsi;
 
 				$this->customcurl->fcm('sharing',$token,$title,$body);
@@ -109,7 +109,7 @@ class Sharing_Model extends CI_Model {
 
 				$sharing = $this->Main_Model->view_by_id('sharing', ['id' => $id]);
 				$profil_post = profile($sharing->nij);
-				
+
 				$title = $profil->nama." Mengomentari postingan ".$profil_post->nama;
 				$body = $table->comment;
 

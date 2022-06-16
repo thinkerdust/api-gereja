@@ -98,7 +98,7 @@
                   </div>
                   <div class="form-group">
                     <label>Termo Gun</label>
-                    <input type="text" id="termo_gun" name="termo_gun" class="form-control" value="<?php echo (!empty($data)) ? $data->termo_gun:'';?>">
+                    <input type="text" id="multimedia" name="multimedia" class="form-control" value="<?php echo (!empty($data)) ? $data->multimedia:'';?>">
                   </div>
                   <div class="form-group">
                     <label>Pokok Doa</label>

@@ -33,7 +33,7 @@ class Sharing extends CI_Controller {
 
 	function store_sharing()
 	{
-		$auth = $this->token->auth('POST', true);
+		$auth = $this->token->auth('POST', false);
 		if($auth) { 
 			$params = get_params();
 			$response = [];

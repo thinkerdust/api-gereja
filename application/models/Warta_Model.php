@@ -37,7 +37,7 @@ class Warta_Model extends CI_Model {
     					'kolektan' => $warta->kolektan,
     					'usher' => $warta->usher,
     					'petugas_lcd' => $warta->petugas_lcd,
-    					'termo_gun' => $warta->termo_gun,
+    					'multimedia' => $warta->multimedia,
     					'tim_musik' => !empty($warta->group) ? $warta->group : '-',
     				);
 

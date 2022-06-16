@@ -49,7 +49,7 @@ class Warta extends CI_Controller {
 									$val->usher,
 									$val->kolektan,
 									$val->petugas_lcd,
-									$val->termo_gun,
+									$val->multimedia,
 									$action
 							);
 				}
@@ -98,7 +98,7 @@ class Warta extends CI_Controller {
 		$koordinator = $this->input->post('koordinator');
 		$petugas_lcd = $this->input->post('petugas_lcd');
 		$kolektan = $this->input->post('kolektan');
-		$termo_gun = $this->input->post('termo_gun');
+		$multimedia = $this->input->post('multimedia');
 		$usher = $this->input->post('usher');
 		$gitar = $this->input->post('gitar');
 		$keyboard = $this->input->post('keyboard');
@@ -118,7 +118,7 @@ class Warta extends CI_Controller {
 			'petugas_lcd' => $petugas_lcd,
 			'usher' => $usher,
 			'kolektan' => $kolektan,
-			'termo_gun' => $termo_gun,
+			'multimedia' => $multimedia,
 		);
 
 		if(!empty($id))

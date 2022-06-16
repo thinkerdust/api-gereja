@@ -18,7 +18,7 @@ class Cronjob extends CI_Controller {
 					foreach($notif as $nf) {
 						$token = get_fcm($nf->nij);
 						if(!empty($token)){
-							$title = 'Jawal Pelayanan';
+							$title = 'Jadwal Pelayanan';
 							$body = 'Anda terjadwal pada pelayanan '.$tgl_warta.' segera konfirmasi kesedian anda';
 
 							$data = array(

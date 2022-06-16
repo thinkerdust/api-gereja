@@ -128,8 +128,6 @@ class Setting extends CI_Controller {
             $phone = substr_replace($phone,'62',0,1);
         }
 
-
-
         $data = [
             "device_id" 	=> $device_id,
             "api_key" 		=> $api_key,
@@ -165,5 +163,41 @@ class Setting extends CI_Controller {
 		    
 			print_json($status,$message,$response);
 		}
+	}
+
+	function master_link()
+	{
+		$params = get_params();
+		$id = isset($params['id']) ? $params['id'] : '';
+		$event = isset($params['event']) ? $params['event'] : '';
+		$link = isset($params['link']) ? $params['link'] : '';
+		$flag = isset($params['flag']) ? $params['flag'] : '';
+		$response = [];
+
+		if($flag == 'INSERT') {
+			$response = $this->Main_Model->process_data('ms_link', ['event' => $event, "link" => $link]);
+			$status = 200;
+        	$message = 'Data berhasil disimpan';
+		}elseif ($flag == 'DELETE') {
+			$respons = $this->Main_Model->delete_data('ms_link', ['id' => $id]);
+			$status = 200;
+        	$message = 'Data berhasil dihapus';
+		}else{
+			if(!empty($id)) {
+				$response = $this->Main_Model->view_by_id('ms_link', ['id' => $id]);
+			}else{
+				$response = $this->Main_Model->view_by_id('ms_link', [], 'result');
+			}
+
+			if(!empty($response)) {
+				$status = 200;
+				$message = 'Data Ditemukan';
+			}else{
+				$status = 404;
+				$message = 'Data Tidak Ditemukan';
+			}   
+		}
+		
+		print_json($status,$message,$response);
 	}
 }
