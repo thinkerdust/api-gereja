@@ -65,8 +65,8 @@ class Cronjob extends CI_Controller {
 
 	function notif_birthday()
 	{
-		$date = date('Y-m-d');
-		$data = $this->Main_Model->view_by_id('profil', ['tgl_lahir' => $date], 'result');
+		$date = date('m-d');
+		$data = $this->Main_Model->view_by_id('profil', [DATE_FORMAT('tgl_lahir', '%m-%d') => $date], 'result');
 
 		if(!empty($data)) {
 			foreach($data as $key) {
