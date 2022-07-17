@@ -187,10 +187,12 @@ class Warta extends CI_Controller {
 
 	function list_kandidat()
 	{
-		$auth = $this->token->auth('GET', false);
+		$auth = $this->token->auth('POST', true);
 		if($auth) {
+			$params = get_params();
+			$id_warta = isset($params['id_warta']) ? $params['id_warta'] : '';
 
-			$response = $this->Main_Model->view_by_id('jemaat', ['flag' => 1, 'user_level' => 3], 'result');
+			$response = $this->Warta_Model->list_kandidat($id_warta);
 
 			if(!empty($response)) {
 				$status = 200;
@@ -209,7 +211,7 @@ class Warta extends CI_Controller {
 		$auth = $this->token->auth('POST', true);
 		if($auth) {
 			$params = get_params();
-			$id_warta = isset($params['id_warta']) ? $params['id_warta'] : '';
+			$id_warta = isset($params['id_warta']) ? $params['id_warta'] : 0;
 			
 			$response = $this->Warta_Model->list_konfirmasi_warta($id_warta);
 

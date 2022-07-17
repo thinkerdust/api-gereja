@@ -84,27 +84,34 @@ class Attendance extends CI_Controller {
 			$id = isset($params['id']) ? $params['id'] : '';
 			$longitude = isset($params['longitude']) ? $params['longitude'] : '';
 			$latitude = isset($params['latitude']) ? $params['latitude'] : '';
+			$date = date('Y-m-d');
 
 			if($id && $longitude && $latitude){
-				$lokasi = $this->Main_Model->view_by_id('lokasi', ['id' => $id]);
+				$cek_scan = $this->Main_Model->view_by_id('log_attendance', ['date(check_in)' => $date, 'user_id' => $user_id], 'num_rows');
+				if($cek_scan > 0) {
+					$lokasi = $this->Main_Model->view_by_id('lokasi', ['id' => $id]);
 
-				if($lokasi) {
-					$radius = 0.1;
-					// cek distance
-					$distance = $this->distance($lokasi->latitude, $lokasi->longitude, $latitude, $longitude, 'K');
+					if($lokasi) {
+						$radius = 0.1;
+						// cek distance
+						$distance = $this->distance($lokasi->latitude, $lokasi->longitude, $latitude, $longitude, 'K');
 
-					if($distance <= $radius) {
-						$this->Main_Model->process_data('log_attendance', ['user_id' => $user_id, 'username' => $username]);
-						$status = 200;
-	            		$message = 'Berhasil Check In '.date('Y-m-d H:i:s');
-					}else{
-						$status = 400;
-	            		$message = 'Gagal Check In. Anda Diluar Radius';
-					}					
-		        }else{
-		        	$status = 404;
-	           		$message = 'Data Tidak Ditemukan';
-		        }
+						if($distance <= $radius) {
+							$this->Main_Model->process_data('log_attendance', ['user_id' => $user_id, 'username' => $username]);
+							$status = 200;
+		            		$message = 'Berhasil Check In '.date('Y-m-d H:i:s');
+						}else{
+							$status = 400;
+		            		$message = 'Gagal Check In. Anda Diluar Radius';
+						}					
+			        }else{
+			        	$status = 404;
+		           		$message = 'Data Tidak Ditemukan';
+			        }
+				}else{
+					$status = 400;
+		           	$message = 'Anda sudah check in';
+				}
 				
 			}else{
 				$status = 400;

@@ -107,4 +107,11 @@ class Warta_Model extends CI_Model {
 		return $query;
 	}
 
+	function list_kandidat($id_warta)
+	{
+		return $this->db->query("
+				SELECT j.* from jemaat j where j.user_level = 3 and NOT EXISTS (SELECT 1 from notif_approval_warta n where n.id_warta = $id_warta and n.nij = j.nij)
+			")->result();
+	}
+
 }
