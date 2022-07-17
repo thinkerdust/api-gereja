@@ -88,7 +88,7 @@ class Attendance extends CI_Controller {
 
 			if($id && $longitude && $latitude){
 				$cek_scan = $this->Main_Model->view_by_id('log_attendance', ['date(check_in)' => $date, 'user_id' => $user_id], 'num_rows');
-				if($cek_scan > 0) {
+				if($cek_scan < 1) {
 					$lokasi = $this->Main_Model->view_by_id('lokasi', ['id' => $id]);
 
 					if($lokasi) {
