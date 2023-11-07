@@ -52,10 +52,11 @@ class Main_Model extends CI_Model {
 
     function send_message($number, $message = 'hello')
     {
-        $url = "http://lmao.my.id/api/message";
+        $url = "https://lmao.my.id/api/chats/send";
 
         $api_key = '466f834b8184a63783201fffdf6723f227d8695aabf624';
-        $device_id = 157;
+        $device_id = 179;
+        $authorization = "Authorization: Bearer ".$api_key;
 
         $phone = $number;
         $phone = preg_replace('/\D/', '', $phone);
@@ -64,23 +65,19 @@ class Main_Model extends CI_Model {
             $phone = substr_replace($phone,'62',0,1);
         }
 
+        $data = '{"device_id": "'.$device_id.'","phone" : "'.$phone.'","message": { "text": "'.$message.'" }}';
 
-
-        $data = [
-            "device_id"     => $device_id,
-            "api_key"       => $api_key,
-            "phone"         => $phone,
-            "message"       => $message
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_POST,1);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($ch, CURLOPT_VERBOSE,true);
-        $result = curl_exec ($ch);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        $result = curl_exec($ch);
         curl_close($ch);
+        
         return json_decode($result);
     }
 
