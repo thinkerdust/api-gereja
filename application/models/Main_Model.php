@@ -65,14 +65,20 @@ class Main_Model extends CI_Model {
             $phone = substr_replace($phone,'62',0,1);
         }
 
-        $data = '{"device_id": "'.$device_id.'","phone" : "'.$phone.'","message": { "text": "'.$message.'" }}';
+        $data = [
+            "device_id"     => $device_id,
+            "phone"         => $phone,
+            "message"       => ["text" => $message]
+        ];
+
+        $data = json_encode($data, FALSE);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $result = curl_exec($ch);
