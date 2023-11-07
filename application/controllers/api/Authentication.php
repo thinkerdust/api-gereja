@@ -19,54 +19,48 @@ class Authentication extends CI_Controller {
 			$username = $this->db->escape_str($username);
             $password = $this->db->escape_str($password);
 
-            $jemaat = $this->Main_Model->view_by_id('jemaat', ['no_telp' => $no_telp]);
+            // $jemaat = $this->Main_Model->view_by_id('jemaat', ['no_telp' => $no_telp]);
 
-            if(!empty($jemaat)){
-				if($nama && $username && $password && $re_password && $no_telp && $otp) {
-					$check_user = $this->Main_Model->view_by_id('user', ['username' => $username, 'no_telp' => $no_telp]);
-					if(strlen($password) < 4){
-						$status = 400;
-		       			$message = "Min karakter password adalah 4!";
-					}elseif ($password != $re_password) {
-						$status = 400;
-		       			$message = "Password tidak sama dengan Re-Password!";
-					}elseif (strlen($password) > 3 && $password == $re_password && empty($check_user)) {
+			if($nama && $username && $password && $re_password && $no_telp && $otp) {
+				$check_user = $this->Main_Model->view_by_id('user', ['username' => $username, 'no_telp' => $no_telp]);
+				if(strlen($password) < 4){
+					$status = 400;
+	       			$message = "Min karakter password adalah 4!";
+				}elseif ($password != $re_password) {
+					$status = 400;
+	       			$message = "Password tidak sama dengan Re-Password!";
+				}elseif (strlen($password) > 3 && $password == $re_password && empty($check_user)) {
 
-			       		$data = array(
-			       				"nij" => $jemaat->nij,
-			       				"nama" => $nama,
-			       				"username" => $username,
-			       				"password" => password_hash($password,PASSWORD_DEFAULT),
-			       				"no_telp" => $no_telp,
-			       				"otp" => $otp,
-			       				"user_level" => $jemaat->user_level,
-			       				"flag" => 1
-			       			);
+		       		$data = array(
+		       				"nij" => $jemaat->nij,
+		       				"nama" => $nama,
+		       				"username" => $username,
+		       				"password" => password_hash($password,PASSWORD_DEFAULT),
+		       				"no_telp" => $no_telp,
+		       				"otp" => $otp,
+		       				"user_level" => $jemaat->user_level,
+		       				"flag" => 1
+		       			);
 
-			       		$process = $this->Main_Model->process_data('user', $data);
+		       		$process = $this->Main_Model->process_data('user', $data);
 
-			       		if($process) {
-			       			$status = 200;
-			       			$message = 'Register Berhasil';
-			       			$response = $data;
-			       		}else{
-			       			$status = 404;
-			       			$message = 'Register Gagal';
-			       		}
-					}else{
-						$status = 400;
-			       		$message = 'Username / No Telp sudah digunakan';
-					}
-
+		       		if($process) {
+		       			$status = 200;
+		       			$message = 'Register Berhasil';
+		       			$response = $data;
+		       		}else{
+		       			$status = 404;
+		       			$message = 'Register Gagal';
+		       		}
 				}else{
 					$status = 400;
-		       		$message = "Mohon Lengkapi Data!";
+		       		$message = 'Username / No Telp sudah digunakan';
 				}
-            }else{
-            	$status = 404;
-		       	$message = "Anda Tidak Terdaftar di GBT Kristus Alfa Omega!";
-            }
 
+			}else{
+				$status = 400;
+	       		$message = "Mohon Lengkapi Data!";
+			}
 
 	       	print_json($status,$message,$response);
 	    }
